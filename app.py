@@ -21,6 +21,12 @@ def create_post():
     title = request.form["title"]
     rating = request.form["rating"]
     review_text = request.form["review_text"]
+    user_id = session["user_id"]
+
+    sql = """INSERT INTO posts (title, rating, review_text, user_id) VALUES (?, ?, ?, ?)"""
+    db.execute(sql, [title, rating, review_text, user_id])
+
+    return redirect("/") #Moves to the main page after creating the post
 
 @app.route("/register")
 def register():
