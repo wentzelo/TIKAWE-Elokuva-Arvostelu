@@ -6,11 +6,20 @@
 </head>
 
 <body>
+  <h1>Elokuvien Arvostelu</h1>
+
   {% if session.username %}
   <p>
     Olet kirjautunut nimellä {{ session.username }}
   </p>
   {% endif %}
+
+  <p>
+    <a href="/login">Kirjaudu sisään</a>
+    <a href="/register">Rekisteröidy</a>
+    <a href="/logout">Kirjaudu ulos</a>
+    
+  </p>
 
 </body>
 

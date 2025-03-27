@@ -10,11 +10,11 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return "Morjensta moi vaan"
+    return render_template("index.html")
 
 @app.route("/register")
 def register():
-    return render_template("index.html")
+    return render_template("register.html")
 
 @app.route("/create", methods=["POST"])
 def create():
