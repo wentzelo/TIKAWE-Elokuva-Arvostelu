@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Lisää uusi arvostelu</title>
+</head>
+
+<body>
+  <h1>Uusi arvostelu</h1>
+  <form action="/create_item" method="post">
+    <p>
+      Elokuvan nimi: <br />
+      <input type="text" name="title" required/>
+    </p>
+    <p>
+      Arvosana: <br />
+      <input type="radio" name="rating" value="1" required> ⭐<br>
+      <input type="radio" name="rating" value="2" required> ⭐⭐<br>
+      <input type="radio" name="rating" value="3" required> ⭐⭐⭐<br>
+      <input type="radio" name="rating" value="4" required> ⭐⭐⭐⭐<br>
+      <input type="radio" name="rating" value="5" required> ⭐⭐⭐⭐⭐<br>
+    </p>
+    <p>
+      Arvostelu: <br />
+      <textarea name="review_text" rows="8" cols="70" required></textarea>
+    </p>
+    <p>
+      <input type="submit" value="Luo arvostelu" />
+    </p>
+  </form>
+</body>
+
+</html>
