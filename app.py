@@ -4,13 +4,20 @@ from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
+import posts
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_posts = posts.get_posts()
+    return render_template("index.html", posts=all_posts)
+
+@app.route("/post/<int:post_id>")
+def show_post(post_id):
+    post = posts.get_post(post_id)
+    return render_template("show_post.html", post=post)
 
 @app.route("/new_post")
 def new_post():
@@ -23,8 +30,7 @@ def create_post():
     review_text = request.form["review_text"]
     user_id = session["user_id"]
 
-    sql = """INSERT INTO posts (title, rating, review_text, user_id) VALUES (?, ?, ?, ?)"""
-    db.execute(sql, [title, rating, review_text, user_id])
+    posts.add_post(title, rating, review_text, user_id)
 
     return redirect("/") #Moves to the main page after creating the post
 

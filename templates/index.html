@@ -23,6 +23,16 @@
     <p>
       <a href="new_post">Uusi arvostelu</a>
     </p>
+
+    <h2>Arvostelut:</h2>
+
+    <ul>
+      {% for post in posts %}
+      <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+      {% endfor %}
+  </ul>
+
+
 </body>
 
 </html>
