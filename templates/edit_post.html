@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Muokkaa arvostelua</title>
+</head>
+
+<body>
+  <h1>Muokkaa arvostelua</h1>
+
+  <form action="/edit_post/{{ post.id }}" method="post">
+    <p>
+      Elokuvan nimi: <br />
+      <input type="text" name="title" value="{{ post.title }}" required>
+    </p>
+
+    <p>
+      Arvosana: <br />
+      <input type="radio" name="rating" value="1" {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
+      <input type="radio" name="rating" value="2" {% if post.rating == 2 %}checked{% endif %}> ⭐⭐<br>
+      <input type="radio" name="rating" value="3" {% if post.rating == 3 %}checked{% endif %}> ⭐⭐⭐<br>
+      <input type="radio" name="rating" value="4" {% if post.rating == 4 %}checked{% endif %}> ⭐⭐⭐⭐<br>
+      <input type="radio" name="rating" value="5" {% if post.rating == 5 %}checked{% endif %}> ⭐⭐⭐⭐⭐<br>
+    </p>
+
+    <p>
+      Arvostelu: <br />
+      <textarea name="review_text" rows="8" cols="70" required>{{ post.review_text }}</textarea>
+    </p>
+
+    <p>
+      <input type="submit" value="Tallenna muutokset">
+    </p>
+  </form>
+
+  <p>
+    <a href="/">Palaa etusivulle</a>
+  </p>
+</body>
+
+</html>

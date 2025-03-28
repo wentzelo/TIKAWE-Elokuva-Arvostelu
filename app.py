@@ -34,6 +34,22 @@ def create_post():
 
     return redirect("/") #Moves to the main page after creating the post
 
+@app.route("/edit_post/<int:post_id>", methods=["GET", "POST"])
+def edit_post(post_id):
+    post = posts.get_post(post_id)
+
+    if request.method == "GET":
+        return render_template("edit_post.html", post=post)
+
+    if request.method == "POST":
+        title = request.form["title"]
+        rating = request.form["rating"]
+        review_text = request.form["review_text"]
+
+        posts.update_post(post_id, title, rating, review_text)
+
+        return redirect(f"/post/{post_id}")
+
 @app.route("/register")
 def register():
     return render_template("register.html")

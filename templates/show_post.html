@@ -15,10 +15,14 @@
   <h1>{{ post.title }}</h1>
   
   <div>
+    <p>Kirjoittaja: {{ post.username }}</p>
+  </div>
+
+  <div>
     <p>Arvosana:</p>
     <div class="stars">
       {% for _ in range(post.rating) %}
-        &#9733;
+      ⭐
       {% endfor %}
     </div>
   </div>
@@ -27,6 +31,13 @@
     <p>Arvostelu:</p>
     <p>{{ post.review_text }}</p>
   </div>
+
+  {% if session.user_id == post.user_id %}
+  <div>
+    <button onclick="window.location.href='/edit_post/{{ post.id }}'">Muokkaa arvostelua</button>
+  </div>
+{% endif %}
+
 
   <div>
     <button onclick="window.location.href='/'">Palaa alkusivulle</button>
