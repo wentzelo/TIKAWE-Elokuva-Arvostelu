@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vahvista poisto</title>
+</head>
+<body>
+  <h1>Arvostelun poisto</h1>
+  <h2>Haluatko varmasti poistaa arvostelun "{{ post.title }}"?</h2>
+  <form action="/remove_post/{{ post.id }}" method="post">
+    <input type="submit" name="continue" value="Kyllä, haluan" />
+    <input type="submit" name="cancel" value="Peruuta" />
+  </form>
+</body>
+</html>

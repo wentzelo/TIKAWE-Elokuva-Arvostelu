@@ -49,6 +49,18 @@ def edit_post(post_id):
         posts.update_post(post_id, title, rating, review_text)
 
         return redirect(f"/post/{post_id}")
+    
+@app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
+def remove_post(post_id):
+    post = posts.get_post(post_id)
+
+    if request.method == "GET":
+        return render_template("remove_post.html", post=post)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            posts.delete_post(post_id)
+        return redirect("/")
 
 @app.route("/register")
 def register():
@@ -69,7 +81,7 @@ def create():
     except sqlite3.IntegrityError:
         return "VIRHE: tunnus on jo varattu"
 
-    return "Tunnus luotu"
+    return render_template("register_return.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
