@@ -3,10 +3,34 @@
 
 <head>
   <title>{{ post.title }}</title>
+  <style>
+    .stars {
+      color: gold;
+      font-size: 24px;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>{{post.title}}</h1>
+  <h1>{{ post.title }}</h1>
+  
+  <div>
+    <p>Arvosana:</p>
+    <div class="stars">
+      {% for _ in range(post.rating) %}
+        &#9733;
+      {% endfor %}
+    </div>
+  </div>
+  
+  <div>
+    <p>Arvostelu:</p>
+    <p>{{ post.review_text }}</p>
+  </div>
+
+  <div>
+    <button onclick="window.location.href='/'">Palaa alkusivulle</button>
+  </div>
   
 </body>
 
