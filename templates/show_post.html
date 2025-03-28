@@ -34,13 +34,13 @@
 
   {% if session.user_id == post.user_id %}
   <div>
-    <button onclick="window.location.href='/edit_post/{{ post.id }}'">Muokkaa arvostelua</button>
+    <button onclick="window.location.href='/edit_post/{{ post.id }}'">Muokkaa</button>
+    <button onclick="window.location.href='/remove_post/{{ post.id }}'">Poista</button>
   </div>
 {% endif %}
 
-
   <div>
-    <button onclick="window.location.href='/'">Palaa alkusivulle</button>
+    <button onclick="window.location.href='/'">Palaa kotisivulle</button>
   </div>
   
 </body>

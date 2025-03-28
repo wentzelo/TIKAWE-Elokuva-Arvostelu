@@ -6,11 +6,11 @@
 </head>
 
 <body>
-  <h1>Elokuvien Arvostelu</h1>
+  <h1>Elokuvien Arvostelu Sovellus™</h1>
 
   {% if session.username %}
   <p>
-    Olet kirjautunut nimellä {{ session.username }}, id numerosi on {{ session.user_id }}
+    Tervetuloa takaisin, {{ session.username }}!
   </p>
   {% endif %}
 
@@ -21,9 +21,9 @@
     </p>
 
     <p>
-      <a href="new_post">Uusi arvostelu</a>
+      <a href="new_post">Kirjoita uusi arvostelu!</a>
     </p>
-
+    <hr> 
     <h2>Arvostelut:</h2>
 
     <ul>
