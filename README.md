@@ -1,5 +1,17 @@
 # Elokuvien arvostelu sovellus
 
+## Nykyinen tilanne
+
+* Käyttäjät voivat rekisteröityä ja kirjautua sisään.
+* Kirjautuneet käyttäjät voivat kirjautua ulos.
+* Käyttäjät voivat lisätä elokuva-arvosteluja.
+* Käyttäjät voivat muokata ja poistaa omia arvosteluitaan.
+* Arvostelut sisältävät elokuvan nimen, arvostelutekstin ja arvosanan (1–5 tähteä).
+* Käyttäjät voivat selata kaikkia arvosteluja.
+* Käyttäjät pystyvät hakemaan arvosteluita hakusanalla arvostelun otsikosta tai tekstistä.
+
+---
+
 ## Sovelluksen toiminnot
 
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
