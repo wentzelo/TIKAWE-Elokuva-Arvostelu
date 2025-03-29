@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Etsi arvostelua</title>
+</head>
+
+<body>
+  <h1>Elokuvien Arvostelu Etsiä™</h1>
+
+  <p>
+    Etsi arvostelu:
+  </p>
+
+  <form action="/search_post" method="get">
+    <p>
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Hae" />
+  </form>
+
+  {% if query %}
+  <hr />
+  <h2>Arvostelut</h2>
+  
+  <ul>
+  {% for post in results %}
+    <li>
+      <a href="/post/{{ post.id }}">
+        {{ post.title }}
+      </a>
+    </li>  
+  {% endfor %}
+  </ul>
+  {% endif %}
+  <div>
+    <button onclick="window.location.href='/'">Palaa kotisivulle</button>
+  </div>
+
+</body>
+</html>

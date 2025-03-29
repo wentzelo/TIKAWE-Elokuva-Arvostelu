@@ -61,6 +61,12 @@ def remove_post(post_id):
         if "continue" in request.form:
             posts.delete_post(post_id)
         return redirect("/")
+    
+@app.route("/search_post")
+def search_post():
+    query = request.args.get("query")
+    results = posts.find_posts(query) if query else []
+    return render_template("search_post.html", query=query, results=results)
 
 @app.route("/register")
 def register():
