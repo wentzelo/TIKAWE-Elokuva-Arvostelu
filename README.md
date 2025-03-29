@@ -10,8 +10,6 @@
 * Käyttäjät voivat selata kaikkia arvosteluja.
 * Käyttäjät pystyvät hakemaan arvosteluita hakusanalla arvostelun otsikosta tai tekstistä.
 
----
-
 ## Sovelluksen toiminnot
 
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
