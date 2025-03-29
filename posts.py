@@ -25,3 +25,8 @@ def update_post(post_id, title, rating, review_text):
 def delete_post(post_id):
     sql = "DELETE FROM posts WHERE id = ?"
     db.execute(sql, [post_id])
+
+def find_posts(query):
+    sql = """SELECT id, title FROM posts WHERE review_text LIKE ? OR title LIKE ? ORDER BY id DESC
+    """
+    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
