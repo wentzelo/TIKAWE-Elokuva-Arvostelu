@@ -25,9 +25,12 @@
     </p>
   {% endif %}
 
-    <p>
-      <a href="new_post">Kirjoita uusi arvostelu!</a>
-    </p>
+  {% if session.username %}
+  <p>
+    <a href="new_post">Kirjoita uusi arvostelu!</a>
+  </p>
+  {% endif %}
+
     <hr> 
     <h2>Arvostelut:</h2>
 

@@ -10,10 +10,16 @@ import users
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def check_login():
+    if "user_id" not in session:
+        abort(403)
+    
+
 @app.route("/")
 def index():
     all_posts = posts.get_posts()
     return render_template("index.html", posts=all_posts)
+
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
@@ -22,12 +28,18 @@ def show_post(post_id):
         abort(404)
     return render_template("show_post.html", post=post)
 
+
 @app.route("/new_post")
 def new_post():
+    check_login()
     return render_template("new_post.html")
+
 
 @app.route("/create_post", methods=["POST"])
 def create_post():
+
+    check_login()
+
     title = request.form["title"]
     rating = request.form["rating"]
     review_text = request.form["review_text"]
@@ -37,9 +49,10 @@ def create_post():
 
     return redirect("/") #Moves to the main page after creating the post
 
+
 @app.route("/edit_post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
-
+    check_login()
     post = posts.get_post(post_id)
     if not post:
         abort(404)
@@ -49,7 +62,7 @@ def edit_post(post_id):
     if request.method == "GET":
         return render_template("edit_post.html", post=post)
 
-    # POST
+    #post
     title = request.form["title"]
     rating = request.form["rating"]
     review_text = request.form["review_text"]
@@ -61,6 +74,7 @@ def edit_post(post_id):
 
 @app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
 def remove_post(post_id):
+    check_login()
     post = posts.get_post(post_id)
     if not post:
         abort(404)
@@ -82,9 +96,11 @@ def search_post():
     results = posts.find_posts(query) if query else []
     return render_template("search_post.html", query=query, results=results)
 
+
 @app.route("/register")
 def register():
     return render_template("register.html")
+
 
 @app.route("/create", methods=["POST"])
 def create():
@@ -121,6 +137,7 @@ def login():
         return redirect("/")
     else:
         return "VIRHE: väärä tunnus tai salasana"
+
 
 @app.route("/logout")
 def logout():
