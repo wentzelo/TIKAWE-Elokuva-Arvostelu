@@ -9,6 +9,6 @@ CREATE TABLE posts (
     id INTEGER PRIMARY KEY,
     title TEXT,
     review_text TEXT,
-    rating INTEGER CHECK,
+    rating INTEGER,
     user_id INTEGER REFERENCES users
 );
