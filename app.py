@@ -41,8 +41,12 @@ def create_post():
     check_login()
 
     title = request.form["title"]
+    if len(title) > 100:
+        abort(403)
     rating = request.form["rating"]
     review_text = request.form["review_text"]
+    if len(review_text) > 4200:
+        abort(403)
     user_id = session["user_id"]
 
     posts.add_post(title, rating, review_text, user_id)
@@ -64,8 +68,12 @@ def edit_post(post_id):
 
     #post
     title = request.form["title"]
+    if len(title) > 100:
+        abort(403)
     rating = request.form["rating"]
     review_text = request.form["review_text"]
+    if len(review_text) > 4200:
+        abort(403)
 
     posts.update_post(post_id, title, rating, review_text)
 

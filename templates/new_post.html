@@ -10,11 +10,11 @@
   <form action="/create_post" method="post">
     <p>
       Elokuvan nimi: <br />
-      <input type="text" name="title" required/>
+      <input type="text" name="title" required maxlength="100"/>
     </p>
     <p>
       Arvosana: <br />
-      <input type="radio" name="rating" value="1"> ⭐<br>
+      <input type="radio" name="rating" value="1" required> ⭐<br>
       <input type="radio" name="rating" value="2"> ⭐⭐<br>
       <input type="radio" name="rating" value="3"> ⭐⭐⭐<br>
       <input type="radio" name="rating" value="4"> ⭐⭐⭐⭐<br>
@@ -22,7 +22,7 @@
     </p>
     <p>
       Arvostelu: <br />
-      <textarea name="review_text" rows="8" cols="70" required></textarea>
+      <textarea name="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
     </p>
     <p>
       <input type="submit" value="Luo arvostelu" />

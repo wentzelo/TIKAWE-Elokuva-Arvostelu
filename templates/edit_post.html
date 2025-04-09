@@ -11,12 +11,12 @@
   <form action="/edit_post/{{ post.id }}" method="post">
     <p>
       Elokuvan nimi: <br />
-      <input type="text" name="title" value="{{ post.title }}" required>
+      <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
     </p>
 
     <p>
       Arvosana: <br />
-      <input type="radio" name="rating" value="1" {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
+      <input type="radio" name="rating" value="1" required {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
       <input type="radio" name="rating" value="2" {% if post.rating == 2 %}checked{% endif %}> ⭐⭐<br>
       <input type="radio" name="rating" value="3" {% if post.rating == 3 %}checked{% endif %}> ⭐⭐⭐<br>
       <input type="radio" name="rating" value="4" {% if post.rating == 4 %}checked{% endif %}> ⭐⭐⭐⭐<br>
@@ -25,7 +25,7 @@
 
     <p>
       Arvostelu: <br />
-      <textarea name="review_text" rows="8" cols="70" required>{{ post.review_text }}</textarea>
+      <textarea name="review_text" rows="8" cols="70" required maxlength="4200"></textarea>{{ post.review_text }}</textarea>
     </p>
 
     <p>
