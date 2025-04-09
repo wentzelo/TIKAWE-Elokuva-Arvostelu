@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session 
+from flask import abort, redirect, render_template, request, session 
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import db
@@ -18,6 +18,8 @@ def index():
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     post = posts.get_post(post_id)
+    if not post:
+        abort(404)
     return render_template("show_post.html", post=post)
 
 @app.route("/new_post")
@@ -37,23 +39,33 @@ def create_post():
 
 @app.route("/edit_post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
+
     post = posts.get_post(post_id)
+    if not post:
+        abort(404)
+    if post["user_id"] != session["user_id"]:
+        abort(403)
 
     if request.method == "GET":
         return render_template("edit_post.html", post=post)
 
-    if request.method == "POST":
-        title = request.form["title"]
-        rating = request.form["rating"]
-        review_text = request.form["review_text"]
+    # POST
+    title = request.form["title"]
+    rating = request.form["rating"]
+    review_text = request.form["review_text"]
 
-        posts.update_post(post_id, title, rating, review_text)
+    posts.update_post(post_id, title, rating, review_text)
 
-        return redirect(f"/post/{post_id}")
-    
+    return redirect(f"/post/{post_id}")
+
+
 @app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
 def remove_post(post_id):
     post = posts.get_post(post_id)
+    if not post:
+        abort(404)
+    if post["user_id"] != session["user_id"]:
+        abort(403)
 
     if request.method == "GET":
         return render_template("remove_post.html", post=post)
@@ -62,6 +74,7 @@ def remove_post(post_id):
         if "continue" in request.form:
             posts.delete_post(post_id)
         return redirect("/")
+
     
 @app.route("/search_post")
 def search_post():
@@ -78,6 +91,9 @@ def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+
+    if not username.strip() or not password1.strip() or not password2.strip():
+        return "VIRHE: kentät eivät saa olla tyhjiä"    
 
     if password1 != password2:
         return "VIRHE: salasanat eivät ole samat"

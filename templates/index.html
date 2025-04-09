@@ -14,15 +14,16 @@
   </p>
   {% endif %}
 
-  <p>
-    <a href="search_post">Etsi arvostelu</a>
-  </p>
-
-  <p>
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Rekisteröidy</a>
-    <a href="/logout">Kirjaudu ulos</a>
+  {% if session.username %}
+    <p>
+      <a href="/logout">Kirjaudu ulos</a>
     </p>
+  {% else %}
+    <p>
+      <a href="/login">Kirjaudu sisään</a>
+      <a href="/register">Rekisteröidy</a>
+    </p>
+  {% endif %}
 
     <p>
       <a href="new_post">Kirjoita uusi arvostelu!</a>
@@ -36,6 +37,9 @@
       {% endfor %}
   </ul>
 
+  <p>
+    <a href="search_post">Etsi arvostelu</a>
+  </p>
 
 </body>
 
