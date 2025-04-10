@@ -13,9 +13,10 @@
 
 <body>
   <h1>{{ post.title }}</h1>
-  
+
   <div>
-    <p>Kirjoittaja: {{ post.username }}</p>
+    <p>Katsottu:</p>
+    <p>{{ post.watch_date }}</p>
   </div>
 
   <div>
@@ -27,10 +28,24 @@
     </div>
   </div>
   
+
   <div>
     <p>Arvostelu:</p>
     <p>{{ post.review_text }}</p>
   </div>
+
+  {% if genres %}
+  <p>Genret:</p>
+  <ul>
+    {% for genre in genres %}
+      <li>{{ genre.name }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+  <p>
+    Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
+  </p>
 
   {% if session.user_id == post.user_id %}
   <div>

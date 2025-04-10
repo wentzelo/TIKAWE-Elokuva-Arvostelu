@@ -1,9 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import abort, redirect, render_template, request, session 
-from werkzeug.security import generate_password_hash, check_password_hash
 import config
-import db
 import posts
 import users
 
@@ -23,10 +21,10 @@ def index():
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
-    post = posts.get_post(post_id)
+    post, genres = posts.get_post(post_id)
     if not post:
         abort(404)
-    return render_template("show_post.html", post=post)
+    return render_template("show_post.html", post=post, genres=genres)
 
 
 @app.route("/new_post")
@@ -37,7 +35,6 @@ def new_post():
 
 @app.route("/create_post", methods=["POST"])
 def create_post():
-
     check_login()
 
     title = request.form["title"]
@@ -47,38 +44,57 @@ def create_post():
     review_text = request.form["review_text"]
     if len(review_text) > 4200:
         abort(403)
+    
     user_id = session["user_id"]
+    watch_date = request.form["watch_date"]
+    genres = request.form.getlist("genres")
+    custom_genre = request.form.get("custom_genre", "").strip()
 
-    posts.add_post(title, rating, review_text, user_id)
+    post_id =posts.add_post(title, rating, review_text, watch_date, user_id)
 
-    return redirect("/") #Moves to the main page after creating the post
+    if custom_genre:
+        genres.append(custom_genre)
+
+    for genre in genres:
+        genre_id = posts.get_or_create_genre(genre)
+        posts.add_post_genre(post_id, genre_id)
+
+    return redirect("/")
 
 
 @app.route("/edit_post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
     check_login()
-    post = posts.get_post(post_id)
+
+    post, genres = posts.get_post(post_id)
     if not post:
         abort(404)
     if post["user_id"] != session["user_id"]:
         abort(403)
 
     if request.method == "GET":
-        return render_template("edit_post.html", post=post)
+        return render_template("edit_post.html", post=post, genres=genres)
 
-    #post
+    # POST
     title = request.form["title"]
     if len(title) > 100:
         abort(403)
+
     rating = request.form["rating"]
     review_text = request.form["review_text"]
     if len(review_text) > 4200:
         abort(403)
 
-    posts.update_post(post_id, title, rating, review_text)
+    watch_date = request.form["watch_date"]
+    selected_genres = request.form.getlist("genres")
+    custom_genre = request.form.get("custom_genre", "").strip()
+
+    posts.update_post(post_id, title, rating, review_text, watch_date)
+
+    #replace old genres
+    posts.update_post_genres(post_id, selected_genres, custom_genre)
 
     return redirect(f"/post/{post_id}")
-
 
 @app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
 def remove_post(post_id):
@@ -104,6 +120,13 @@ def search_post():
     results = posts.find_posts(query) if query else []
     return render_template("search_post.html", query=query, results=results)
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    posts = users.get_posts2(user_id)
+    return render_template("show_user.html", user=user, posts=posts)
 
 @app.route("/register")
 def register():

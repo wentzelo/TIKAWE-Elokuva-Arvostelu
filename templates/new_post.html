@@ -12,6 +12,12 @@
       Elokuvan nimi: <br />
       <input type="text" name="title" required maxlength="100"/>
     </p>
+
+    <p>
+      Päivämäärä jolloin katsoit elokuvan: <br />
+      <input type="date" name="watch_date" required>
+    </p>
+
     <p>
       Arvosana: <br />
       <input type="radio" name="rating" value="1" required> ⭐<br>
@@ -24,6 +30,26 @@
       Arvostelu: <br />
       <textarea name="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
     </p>
+
+    <p>
+      Valitse genret: <br />
+      <label><input type="checkbox" name="genres" value="Toiminta"> Toiminta</label>
+      <label><input type="checkbox" name="genres" value="Draama"> Draama</label>
+      <label><input type="checkbox" name="genres" value="Komedia"> Komedia</label>
+      <label><input type="checkbox" name="genres" value="Sci-fi"> Sci-fi</label>
+      <label><input type="checkbox" name="genres" value="Kauhu"> Kauhu</label>
+      <label><input type="checkbox" name="genres" value="Romantiikka"> Romantiikka</label>
+      <label><input type="checkbox" name="genres" value="Dokumentti"> Dokumentti</label>
+      <label><input type="checkbox" name="genres" value="Seikkailu"> Seikkailu</label>
+      <label><input type="checkbox" name="genres" value="Fantasia"> Fantasia</label>
+      <label><input type="checkbox" name="genres" value="Animaatio"> Animaatio</label>
+    </p>
+    
+    <p>
+      Muu genre: <br />
+      <input type="text" name="custom_genre" maxlength="30"/>
+    </p>
+
     <p>
       <input type="submit" value="Luo arvostelu" />
     </p>

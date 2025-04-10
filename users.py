@@ -14,8 +14,23 @@ def create_user(username, password):
 def login_user(username, password):
     sql = "SELECT id, password_hash FROM users WHERE username = ?"
     result = db.query(sql, [username])
-    if result:
-        user = result[0]
-        if check_password_hash(user["password_hash"], password):
-            return user
-    return None
+    if not result:
+        return None
+
+    user = result[0]
+    return user if check_password_hash(user["password_hash"], password) else None
+
+
+def get_user(user_id):
+    sql = "SELECT id, username FROM users WHERE id = ?"
+    result = db.query(sql, [user_id])
+    return result[0] if result else None
+
+def get_posts2(user_id):
+    sql = """
+    SELECT id, title
+    FROM posts 
+    WHERE user_id = ?
+    ORDER BY id DESC
+    """
+    return db.query(sql, [user_id])

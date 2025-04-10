@@ -1,8 +1,8 @@
 import db
 
-def add_post(title, rating, review_text, user_id):
-    sql = """INSERT INTO posts (title, rating, review_text, user_id) VALUES (?, ?, ?, ?)"""
-    db.execute(sql, [title, rating, review_text, user_id])
+def add_post(title, rating, review_text, watch_date, user_id):
+    sql = """INSERT INTO posts (title, rating, review_text, watch_date, user_id) VALUES (?, ?, ?, ?, ?)"""
+    db.execute(sql, [title, rating, review_text, watch_date, user_id])
 
 def get_posts():
     sql = """SELECT id, title FROM posts ORDER BY id"""
@@ -11,21 +11,36 @@ def get_posts():
 
 def get_post(post_id):
     sql = """
-    SELECT posts.id, posts.title, posts.rating, posts.review_text, users.id user_id, users.username 
+    SELECT posts.id, posts.title, posts.rating, posts.review_text, posts.watch_date,
+           users.id user_id, users.username 
     FROM posts, users 
     WHERE posts.user_id = users.id 
     AND posts.id = ?
     """
     result = db.query(sql, [post_id])
-    return result[0] if result else None
+    if not result:
+        return None, []
 
-def update_post(post_id, title, rating, review_text):
-    sql = """
-    UPDATE posts
-    SET title = ?, rating = ?, review_text = ?
-    WHERE id = ?
+    post = dict(result[0])
+
+    # Haetaan genret erikseen
+    genre_sql = """
+        SELECT genres.name
+        FROM genres
+        JOIN post_genres ON genres.id = post_genres.genre_id
+        WHERE post_genres.post_id = ?
     """
-    db.execute(sql, [title, rating, review_text, post_id])
+    genres = db.query(genre_sql, [post_id])
+
+    return post, genres
+
+def update_post(post_id, title, rating, review_text, watch_date):
+    sql = """
+        UPDATE posts
+        SET title = ?, rating = ?, review_text = ?, watch_date = ?
+        WHERE id = ?
+    """
+    db.execute(sql, [title, rating, review_text, watch_date, post_id])
 
 def delete_post(post_id):
     sql = "DELETE FROM posts WHERE id = ?"
@@ -39,3 +54,40 @@ def find_posts(query):
     ORDER BY id DESC
     """
     return db.query(sql, ["%" + query + "%", "%" + query + "%"])
+
+def add_post(title, rating, review_text, watch_date, user_id):
+    sql = """
+        INSERT INTO posts (title, rating, review_text, watch_date, user_id)
+        VALUES (?, ?, ?, ?, ?)
+    """
+    db.execute(sql, [title, rating, review_text, watch_date, user_id])
+    return db.last_insert_id()
+
+def get_or_create_genre(name):
+    sql = "SELECT id FROM genres WHERE name = ?"
+    result = db.query(sql, [name])
+    if result:
+        return result[0]["id"]
+    
+    sql = "INSERT INTO genres (name) VALUES (?)"
+    db.execute(sql, [name])
+    return db.last_insert_id()
+
+def add_post_genre(post_id, genre_id):
+    sql = "INSERT INTO post_genres (post_id, genre_id) VALUES (?, ?)"
+    db.execute(sql, [post_id, genre_id])
+
+def update_post_genres(post_id, selected_genres, custom_genre=None):
+    #remove current genres from post
+    sql = "DELETE FROM post_genres WHERE post_id = ?"
+    db.execute(sql, [post_id])
+
+    #add custom genre if added
+    if custom_genre:
+        custom_genre = custom_genre.strip()
+        if custom_genre:
+            selected_genres.append(custom_genre)
+
+    for genre in selected_genres:
+        genre_id = get_or_create_genre(genre)
+        add_post_genre(post_id, genre_id)

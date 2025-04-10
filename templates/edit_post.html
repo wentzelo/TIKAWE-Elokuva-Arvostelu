@@ -14,6 +14,12 @@
       <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
     </p>
 
+    
+    <p>
+      Päivämäärä jolloin katsoit elokuvan: <br />
+      <input type="date" name="watch_date" value="{{ post.watch_date }}" required>
+    </p>
+
     <p>
       Arvosana: <br />
       <input type="radio" name="rating" value="1" required {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
@@ -25,7 +31,25 @@
 
     <p>
       Arvostelu: <br />
-      <textarea name="review_text" rows="8" cols="70" required maxlength="4200"></textarea>{{ post.review_text }}</textarea>
+      <textarea name="review_text" rows="8" cols="70" required maxlength="4200">{{ post.review_text }}</textarea>
+    </p>
+
+    <p>
+      Valitse genret: <br />
+      {% for genre in ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka", "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"] %}
+        <label>
+          <input type="checkbox" name="genres" value="{{ genre }}"
+          {% for g in genres %}
+            {% if g.name == genre %}checked{% endif %}
+          {% endfor %}>
+          {{ genre }}
+        </label><br>
+      {% endfor %}
+    </p>
+
+    <p>
+      Muu genre: <br />
+      <input type="text" name="custom_genre" maxlength="30" placeholder="Esim. Musikaali">
     </p>
 
     <p>

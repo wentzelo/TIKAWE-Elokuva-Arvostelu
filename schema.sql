@@ -10,5 +10,17 @@ CREATE TABLE posts (
     title TEXT,
     review_text TEXT,
     rating INTEGER,
-    user_id INTEGER REFERENCES users
+    watch_date TEXT,
+    user_id INTEGER REFERENCES users(id)
+);
+
+CREATE TABLE genres (
+    id INTEGER PRIMARY KEY,
+    name TEXT UNIQUE
+);
+
+CREATE TABLE post_genres (
+    post_id INTEGER REFERENCES posts(id),
+    genre_id INTEGER REFERENCES genres(id),
+    PRIMARY KEY (post_id, genre_id)
 );
