@@ -8,6 +8,7 @@ import users
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+
 def check_login():
     if "user_id" not in session:
         abort(403)
@@ -21,7 +22,8 @@ def index():
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
-    post, genres = posts.get_post(post_id)
+    post = posts.get_post(post_id)
+    genres = posts.get_post_genres(post_id)
     if not post:
         abort(404)
     return render_template("show_post.html", post=post, genres=genres)
@@ -66,7 +68,9 @@ def create_post():
 def edit_post(post_id):
     check_login()
 
-    post, genres = posts.get_post(post_id)
+    post = posts.get_post(post_id)
+    genres = posts.get_post_genres(post_id)
+
     if not post:
         abort(404)
     if post["user_id"] != session["user_id"]:
@@ -96,9 +100,11 @@ def edit_post(post_id):
 
     return redirect(f"/post/{post_id}")
 
+
 @app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
 def remove_post(post_id):
     check_login()
+
     post = posts.get_post(post_id)
     if not post:
         abort(404)
@@ -120,6 +126,7 @@ def search_post():
     results = posts.find_posts(query) if query else []
     return render_template("search_post.html", query=query, results=results)
 
+
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
@@ -127,6 +134,7 @@ def show_user(user_id):
         abort(404)
     posts = users.get_posts2(user_id)
     return render_template("show_user.html", user=user, posts=posts)
+
 
 @app.route("/register")
 def register():

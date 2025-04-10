@@ -12,27 +12,24 @@ def get_posts():
 def get_post(post_id):
     sql = """
     SELECT posts.id, posts.title, posts.rating, posts.review_text, posts.watch_date,
-           users.id user_id, users.username 
-    FROM posts, users 
-    WHERE posts.user_id = users.id 
-    AND posts.id = ?
+           users.id AS user_id, users.username
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.id = ?
     """
     result = db.query(sql, [post_id])
     if not result:
-        return None, []
+        return None
+    return dict(result[0])
 
-    post = dict(result[0])
-
-    # Haetaan genret erikseen
-    genre_sql = """
-        SELECT genres.name
-        FROM genres
-        JOIN post_genres ON genres.id = post_genres.genre_id
-        WHERE post_genres.post_id = ?
+def get_post_genres(post_id):
+    sql = """
+    SELECT genres.name
+    FROM genres
+    JOIN post_genres ON genres.id = post_genres.genre_id
+    WHERE post_genres.post_id = ?
     """
-    genres = db.query(genre_sql, [post_id])
-
-    return post, genres
+    return db.query(sql, [post_id])
 
 def update_post(post_id, title, rating, review_text, watch_date):
     sql = """
@@ -43,6 +40,9 @@ def update_post(post_id, title, rating, review_text, watch_date):
     db.execute(sql, [title, rating, review_text, watch_date, post_id])
 
 def delete_post(post_id):
+    sql = "DELETE FROM post_genres WHERE post_id = ?"
+    db.execute(sql, [post_id])
+
     sql = "DELETE FROM posts WHERE id = ?"
     db.execute(sql, [post_id])
 
@@ -78,16 +78,17 @@ def add_post_genre(post_id, genre_id):
     db.execute(sql, [post_id, genre_id])
 
 def update_post_genres(post_id, selected_genres, custom_genre=None):
-    #remove current genres from post
-    sql = "DELETE FROM post_genres WHERE post_id = ?"
-    db.execute(sql, [post_id])
 
-    #add custom genre if added
+    db.execute("DELETE FROM post_genres WHERE post_id = ?", [post_id])
+    
+    genre_set = set(selected_genres)  # ei strip() tarvitaan täällä
+
     if custom_genre:
-        custom_genre = custom_genre.strip()
-        if custom_genre:
-            selected_genres.append(custom_genre)
+        for genre in custom_genre.split(","):
+            genre = genre.strip()
+            if genre:
+                genre_set.add(genre)
 
-    for genre in selected_genres:
+    for genre in genre_set:
         genre_id = get_or_create_genre(genre)
         add_post_genre(post_id, genre_id)
