@@ -1,6 +1,7 @@
-import sqlite3
+"""Main application file for the Elokuva-arvostelu web app."""
+
 from flask import Flask
-from flask import abort, redirect, render_template, request, session 
+from flask import abort, redirect, render_template, request, session
 import config
 import posts
 import users
@@ -8,17 +9,14 @@ import users
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
-
 def check_login():
     if "user_id" not in session:
         abort(403)
-    
 
 @app.route("/")
 def index():
     all_posts = posts.get_posts()
     return render_template("index.html", posts=all_posts)
-
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
@@ -29,15 +27,18 @@ def show_post(post_id):
 
     good_count, bad_count = posts.get_comment_counts(post_id)
     comments = posts.get_comments(post_id)
-    
-    return render_template("show_post.html", post=post, genres=genres, good_count=good_count, bad_count=bad_count, comments=comments)
 
+    return render_template("show_post.html",
+                                            post=post,
+                                            genres=genres,
+                                            good_count=good_count,
+                                            bad_count=bad_count,
+                                            comments=comments)
 
 @app.route("/new_post")
 def new_post():
     check_login()
     return render_template("new_post.html")
-
 
 @app.route("/create_post", methods=["POST"])
 def create_post():
@@ -50,13 +51,13 @@ def create_post():
     review_text = request.form["review_text"]
     if len(review_text) > 4200:
         abort(403)
-    
+
     user_id = session["user_id"]
     watch_date = request.form["watch_date"]
     genres = request.form.getlist("genres")
     custom_genre = request.form.get("custom_genre", "").strip()
 
-    post_id =posts.add_post(title, rating, review_text, watch_date, user_id)
+    post_id = posts.add_post(title, rating, review_text, watch_date, user_id)
 
     if custom_genre:
         genres.append(custom_genre)
@@ -66,7 +67,6 @@ def create_post():
         posts.add_post_genre(post_id, genre_id)
 
     return redirect("/")
-
 
 @app.route("/edit_post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
@@ -104,7 +104,6 @@ def edit_post(post_id):
 
     return redirect(f"/post/{post_id}")
 
-
 @app.route("/remove_post/<int:post_id>", methods=["GET", "POST"])
 def remove_post(post_id):
     check_login()
@@ -118,27 +117,23 @@ def remove_post(post_id):
     if request.method == "GET":
         return render_template("remove_post.html", post=post)
 
-    if request.method == "POST":
-        if "continue" in request.form:
-            posts.delete_post(post_id)
-        return redirect("/")
+    if request.method == "POST" and "continue" in request.form:
+        posts.delete_post(post_id)
+    return redirect("/")
 
-    
 @app.route("/search_post")
 def search_post():
     query = request.args.get("query")
     results = posts.find_posts(query) if query else []
     return render_template("search_post.html", query=query, results=results)
 
-
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    posts = users.get_posts2(user_id)
-    return render_template("show_user.html", user=user, posts=posts)
-
+    user_posts = users.get_user_posts(user_id)
+    return render_template("show_user.html", user=user, posts=user_posts)
 
 @app.route("/comment/<int:post_id>", methods=["POST"])
 def give_comment(post_id):
@@ -153,12 +148,9 @@ def give_comment(post_id):
 
     return redirect(f"/post/{post_id}")
 
-
-
 @app.route("/register")
 def register():
     return render_template("register.html")
-
 
 @app.route("/create", methods=["POST"])
 def create():
@@ -167,7 +159,7 @@ def create():
     password2 = request.form["password2"]
 
     if not username.strip() or not password1.strip() or not password2.strip():
-        return "VIRHE: kentät eivät saa olla tyhjiä"    
+        return "VIRHE: kentät eivät saa olla tyhjiä" 
 
     if password1 != password2:
         return "VIRHE: salasanat eivät ole samat"
@@ -177,7 +169,6 @@ def create():
         return "VIRHE: tunnus on jo varattu"
 
     return render_template("register_return.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -193,9 +184,8 @@ def login():
         session["user_id"] = user["id"]
         session["username"] = username
         return redirect("/")
-    else:
-        return "VIRHE: väärä tunnus tai salasana"
 
+    return "VIRHE: väärä tunnus tai salasana"
 
 @app.route("/logout")
 def logout():

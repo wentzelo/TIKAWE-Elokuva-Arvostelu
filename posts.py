@@ -1,12 +1,18 @@
+"""Handles all database operations related to movie reviews (posts)"""
+
 import db
 
 def add_post(title, rating, review_text, watch_date, user_id):
-    sql = """INSERT INTO posts (title, rating, review_text, watch_date, user_id) VALUES (?, ?, ?, ?, ?)"""
+    sql = """
+        INSERT INTO posts (title, rating, review_text, watch_date, user_id)
+        VALUES (?, ?, ?, ?, ?)
+    """
     db.execute(sql, [title, rating, review_text, watch_date, user_id])
+    return db.last_insert_id()
 
 def get_posts():
-    sql = """SELECT id, title FROM posts ORDER BY id"""
-    
+    sql = """SELECT id, title FROM posts ORDER BY id DESC"""
+
     return db.query(sql)
 
 def get_post(post_id):
@@ -40,11 +46,12 @@ def update_post(post_id, title, rating, review_text, watch_date):
     db.execute(sql, [title, rating, review_text, watch_date, post_id])
 
 def delete_post(post_id):
-    sql = "DELETE FROM post_genres WHERE post_id = ?"
-    db.execute(sql, [post_id])
 
-    sql = "DELETE FROM posts WHERE id = ?"
-    db.execute(sql, [post_id])
+    db.execute("DELETE FROM comments WHERE post_id = ?", [post_id])
+
+    db.execute("DELETE FROM post_genres WHERE post_id = ?", [post_id])
+
+    db.execute("DELETE FROM posts WHERE id = ?", [post_id])
 
 def find_posts(query):
     sql = """
@@ -55,14 +62,6 @@ def find_posts(query):
     """
     return db.query(sql, ["%" + query + "%", "%" + query + "%"])
 
-def add_post(title, rating, review_text, watch_date, user_id):
-    sql = """
-        INSERT INTO posts (title, rating, review_text, watch_date, user_id)
-        VALUES (?, ?, ?, ?, ?)
-    """
-    db.execute(sql, [title, rating, review_text, watch_date, user_id])
-    return db.last_insert_id()
-
 #Genre code
 
 def get_or_create_genre(name):
@@ -70,7 +69,7 @@ def get_or_create_genre(name):
     result = db.query(sql, [name])
     if result:
         return result[0]["id"]
-    
+
     sql = "INSERT INTO genres (name) VALUES (?)"
     db.execute(sql, [name])
     return db.last_insert_id()
@@ -82,7 +81,7 @@ def add_post_genre(post_id, genre_id):
 def update_post_genres(post_id, selected_genres, custom_genre=None):
 
     db.execute("DELETE FROM post_genres WHERE post_id = ?", [post_id])
-    
+
     genre_set = set(selected_genres)
 
     if custom_genre:

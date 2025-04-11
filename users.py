@@ -1,6 +1,8 @@
-import db
+"""Handles user-related database operations: registration, login, and profile data."""
+
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+import db
 
 def create_user(username, password):
     password_hash = generate_password_hash(password)
@@ -26,7 +28,7 @@ def get_user(user_id):
     result = db.query(sql, [user_id])
     return result[0] if result else None
 
-def get_posts2(user_id):
+def get_user_posts(user_id):
     sql = """
     SELECT id, title
     FROM posts 
