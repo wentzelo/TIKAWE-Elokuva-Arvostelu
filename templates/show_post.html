@@ -14,6 +14,10 @@
 <body>
   <h1>{{ post.title }}</h1>
 
+  <p>
+    Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
+  </p>
+
   <div>
     <p>Katsottu:</p>
     <p>{{ post.watch_date }}</p>
@@ -43,9 +47,6 @@
   </ul>
 {% endif %}
 
-  <p>
-    Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
-  </p>
 
   {% if session.user_id == post.user_id %}
   <div>
@@ -54,7 +55,43 @@
   </div>
 {% endif %}
 
-  <div>
+<hr> 
+
+<h3>Arvostele arvostelu</h3>
+
+<form action="/comment/{{ post.id }}" method="post">
+  <label>
+    <input type="radio" name="reaction" value="good" required> 👍
+  </label>
+  <label>
+    <input type="radio" name="reaction" value="bad"> 👎
+  </label>
+  <p>
+    Kommentti (valinnainen):<br>
+    <textarea name="comment" rows="3" cols="70" maxlength="500"></textarea>
+  </p>
+  <input type="submit" value="Lähetä">
+</form>
+
+<hr>
+
+<h4>Saadut kommentit</h4>
+<ul>
+  {% for c in comments %}
+    <li>
+      {% if c.is_positive %}
+      👍
+      {% else %}
+      👎
+      {% endif %}
+      {{ c.comment }} <em>({{ c.created_at }})</em>
+    </li>
+  {% endfor %}
+</ul>
+
+<hr> 
+
+<div>
     <button onclick="window.location.href='/'">Palaa kotisivulle</button>
   </div>
   

@@ -26,7 +26,11 @@ def show_post(post_id):
     genres = posts.get_post_genres(post_id)
     if not post:
         abort(404)
-    return render_template("show_post.html", post=post, genres=genres)
+
+    good_count, bad_count = posts.get_comment_counts(post_id)
+    comments = posts.get_comments(post_id)
+    
+    return render_template("show_post.html", post=post, genres=genres, good_count=good_count, bad_count=bad_count, comments=comments)
 
 
 @app.route("/new_post")
@@ -134,6 +138,21 @@ def show_user(user_id):
         abort(404)
     posts = users.get_posts2(user_id)
     return render_template("show_user.html", user=user, posts=posts)
+
+
+@app.route("/comment/<int:post_id>", methods=["POST"])
+def give_comment(post_id):
+    reaction = request.form.get("reaction")
+    text = request.form.get("comment", "").strip()
+
+    if reaction not in ("good", "bad"):
+        abort(400)
+
+    is_positive = 1 if reaction == "good" else 0
+    posts.add_comment(post_id, is_positive, text)
+
+    return redirect(f"/post/{post_id}")
+
 
 
 @app.route("/register")

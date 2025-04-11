@@ -63,6 +63,8 @@ def add_post(title, rating, review_text, watch_date, user_id):
     db.execute(sql, [title, rating, review_text, watch_date, user_id])
     return db.last_insert_id()
 
+#Genre code
+
 def get_or_create_genre(name):
     sql = "SELECT id FROM genres WHERE name = ?"
     result = db.query(sql, [name])
@@ -81,7 +83,7 @@ def update_post_genres(post_id, selected_genres, custom_genre=None):
 
     db.execute("DELETE FROM post_genres WHERE post_id = ?", [post_id])
     
-    genre_set = set(selected_genres)  # ei strip() tarvitaan täällä
+    genre_set = set(selected_genres)
 
     if custom_genre:
         for genre in custom_genre.split(","):
@@ -92,3 +94,25 @@ def update_post_genres(post_id, selected_genres, custom_genre=None):
     for genre in genre_set:
         genre_id = get_or_create_genre(genre)
         add_post_genre(post_id, genre_id)
+
+#Comment code
+
+def add_comment(post_id, is_positive, comment):
+    sql = "INSERT INTO comments (post_id, is_positive, comment) VALUES (?, ?, ?)"
+    db.execute(sql, [post_id, is_positive, comment])
+
+def get_comment_counts(post_id):
+    sql_good = "SELECT COUNT(*) FROM comments WHERE post_id = ? AND is_positive = 1"
+    sql_bad = "SELECT COUNT(*) FROM comments WHERE post_id = ? AND is_positive = 0"
+    good = db.query(sql_good, [post_id])[0][0]
+    bad = db.query(sql_bad, [post_id])[0][0]
+    return good, bad
+
+def get_comments(post_id):
+    sql = """
+    SELECT is_positive, comment, created_at
+    FROM comments
+    WHERE post_id = ?
+    ORDER BY created_at DESC
+    """
+    return db.query(sql, [post_id])

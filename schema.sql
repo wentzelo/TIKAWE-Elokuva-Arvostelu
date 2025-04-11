@@ -24,3 +24,11 @@ CREATE TABLE post_genres (
     genre_id INTEGER REFERENCES genres(id),
     PRIMARY KEY (post_id, genre_id)
 );
+
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    post_id INTEGER REFERENCES posts(id),
+    is_positive INTEGER,
+    comment TEXT,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
