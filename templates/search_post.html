@@ -1,45 +1,34 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Etsi arvostelua</title>
-</head>
+{% block title %}Etsi arvostelua{% endblock %}
 
-<body>
-  <h1>Elokuvien Arvostelu Etsiä™</h1>
+{% block content %}
 
+<h2>Etsi arvostelu</h2>
+
+<form action="/search_post" method="get">
   <p>
-    Etsi arvostelu:
-  </p>
-
-  <form action="/search_post" method="get">
-    <p>
-      {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
-      {% else %}
-      <input type="text" name="query" />
-      {% endif %}
-    </p>
+    <input type="text" name="query" value="{{ query or '' }}" />
     <input type="submit" value="Hae" />
-  </form>
+  </p>
+</form>
 
-  {% if query %}
+{% if query %}
   <hr />
   <h2>Arvostelut</h2>
-  
-  <ul>
-  {% for post in results %}
-    <li>
-      <a href="/post/{{ post.id }}">
-        {{ post.title }}
-      </a>
-    </li>  
-  {% endfor %}
-  </ul>
+  {% if results %}
+    <ul>
+      {% for post in results %}
+        <li>
+          <a href="/post/{{ post.id }}">
+            {{ post.title }}
+          </a>
+        </li>  
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Ei hakutuloksia.</p>
   {% endif %}
-  <div>
-    <button onclick="window.location.href='/'">Palaa kotisivulle</button>
-  </div>
+{% endif %}
 
-</body>
-</html>
+{% endblock %}

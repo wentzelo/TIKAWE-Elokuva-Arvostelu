@@ -1,49 +1,20 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Elokuvien Arvostelu</title>
-</head>
+{% block title %}Etusivu{% endblock %}
 
-<body>
-  <h1>Elokuvien Arvostelu Sovellus™</h1>
+{% block content %}
 
-  {% if session.username %}
-  <p>
-    Tervetuloa takaisin, {{ session.username }}!
-  </p>
-  {% endif %}
+{% if session.username %}
+<p>
+  <a href="new_post">Kirjoita uusi arvostelu!</a>
+</p>
+{% endif %}
 
-  {% if session.username %}
-    <p>
-      <a href="/logout">Kirjaudu ulos</a>
-    </p>
-  {% else %}
-    <p>
-      <a href="/login">Kirjaudu sisään</a>
-      <a href="/register">Rekisteröidy</a>
-    </p>
-  {% endif %}
+<h2>Arvostelut:</h2>
+<ul>
+  {% for post in posts %}
+    <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
 
-  {% if session.username %}
-  <p>
-    <a href="new_post">Kirjoita uusi arvostelu!</a>
-  </p>
-  {% endif %}
-
-    <hr> 
-    <h2>Arvostelut:</h2>
-
-    <ul>
-      {% for post in posts %}
-      <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
-      {% endfor %}
-  </ul>
-
-  <p>
-    <a href="search_post">Etsi arvostelu</a>
-  </p>
-
-</body>
-
-</html>
+{% endblock %}

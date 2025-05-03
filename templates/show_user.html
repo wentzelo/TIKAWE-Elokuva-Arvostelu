@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Arvostelija: {{ user.username }}</title>
-</head>
+{% block title %}Arvostelija: {{ user.username }}{% endblock %}
 
-<body>
+{% block content %}
   <h1>Arvostelija: {{ user.username }}</h1>
 
   <p>
-    Arvosteluita: {{ posts | count}}
+    Arvosteluita: {{ posts | count }}
   </p>
 
   <h2>Arvostelut</h2>
   <ul>
     {% for post in posts %}
-    <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
+      <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
-
-  <div>
-    <button onclick="window.location.href='/'">Palaa kotisivulle</button>
-  </div>
-  
-</body>
-
-</html>
+{% endblock %}

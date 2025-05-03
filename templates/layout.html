@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+  <h1>Elokuvien Arvostelu Sovellus™</h1>
+
+  {% if session.username %}
+  <p>
+    Tervetuloa takaisin, {{ session.username }}!
+  </p>
+  {% endif %}
+
+  <p>
+    <a href="/">Etusivu</a>
+    | <a href="/search_post">Etsi arvostelu</a>
+    {% if session.username %}
+      | <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+      | <a href="/login">Kirjaudu sisään</a>
+      | <a href="/register">Rekisteröidy</a>
+    {% endif %}
+  </p>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+
+</html>

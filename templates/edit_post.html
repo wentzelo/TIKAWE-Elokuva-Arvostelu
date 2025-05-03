@@ -1,65 +1,57 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Muokkaa arvostelua</title>
-</head>
+{% block title %}Muokkaa arvostelua{% endblock %}
 
-<body>
-  <h1>Muokkaa arvostelua</h1>
+{% block content %}
 
-  <form action="/edit_post/{{ post.id }}" method="post">
-    <p>
-      Elokuvan nimi: <br />
-      <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
-    </p>
+<h1>Muokkaa arvostelua</h1>
 
-    
-    <p>
-      Päivämäärä jolloin katsoit elokuvan: <br />
-      <input type="date" name="watch_date" value="{{ post.watch_date }}" required>
-    </p>
-
-    <p>
-      Arvosana: <br />
-      <input type="radio" name="rating" value="1" required {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
-      <input type="radio" name="rating" value="2" {% if post.rating == 2 %}checked{% endif %}> ⭐⭐<br>
-      <input type="radio" name="rating" value="3" {% if post.rating == 3 %}checked{% endif %}> ⭐⭐⭐<br>
-      <input type="radio" name="rating" value="4" {% if post.rating == 4 %}checked{% endif %}> ⭐⭐⭐⭐<br>
-      <input type="radio" name="rating" value="5" {% if post.rating == 5 %}checked{% endif %}> ⭐⭐⭐⭐⭐<br>
-    </p>
-
-    <p>
-      Arvostelu: <br />
-      <textarea name="review_text" rows="8" cols="70" required maxlength="4200">{{ post.review_text }}</textarea>
-    </p>
-
-    <p>
-      Valitse genret: <br />
-      {% for genre in ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka", "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"] %}
-        <label>
-          <input type="checkbox" name="genres" value="{{ genre }}"
-          {% for g in genres %}
-            {% if g.name == genre %}checked{% endif %}
-          {% endfor %}>
-          {{ genre }}
-        </label><br>
-      {% endfor %}
-    </p>
-
-    <p>
-      Omat genret (pilkulla erotettuna): <br />
-      <input type="text" name="custom_genre" maxlength="100">
-    </p>
-
-    <p>
-      <input type="submit" value="Tallenna muutokset">
-    </p>
-  </form>
+<form action="/edit_post/{{ post.id }}" method="post">
+  <p>
+    Elokuvan nimi: <br />
+    <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
+  </p>
 
   <p>
-    <a href="/">Palaa etusivulle</a>
+    Päivämäärä jolloin katsoit elokuvan: <br />
+    <input type="date" name="watch_date" value="{{ post.watch_date }}" required>
   </p>
-</body>
 
-</html>
+  <p>
+    Arvosana: <br />
+    <input type="radio" name="rating" value="1" required {% if post.rating == 1 %}checked{% endif %}> ⭐<br>
+    <input type="radio" name="rating" value="2" {% if post.rating == 2 %}checked{% endif %}> ⭐⭐<br>
+    <input type="radio" name="rating" value="3" {% if post.rating == 3 %}checked{% endif %}> ⭐⭐⭐<br>
+    <input type="radio" name="rating" value="4" {% if post.rating == 4 %}checked{% endif %}> ⭐⭐⭐⭐<br>
+    <input type="radio" name="rating" value="5" {% if post.rating == 5 %}checked{% endif %}> ⭐⭐⭐⭐⭐<br>
+  </p>
+
+  <p>
+    Arvostelu: <br />
+    <textarea name="review_text" rows="8" cols="70" required maxlength="4200">{{ post.review_text }}</textarea>
+  </p>
+
+  <p>
+    Valitse genret: <br />
+    {% for genre in ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka", "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"] %}
+      <label>
+        <input type="checkbox" name="genres" value="{{ genre }}"
+        {% for g in genres %}
+          {% if g.name == genre %}checked{% endif %}
+        {% endfor %}>
+        {{ genre }}
+      </label><br>
+    {% endfor %}
+  </p>
+
+  <p>
+    Omat genret (pilkulla erotettuna): <br />
+    <input type="text" name="custom_genre" maxlength="100">
+  </p>
+
+  <p>
+    <input type="submit" value="Tallenna muutokset">
+  </p>
+</form>
+
+{% endblock %}

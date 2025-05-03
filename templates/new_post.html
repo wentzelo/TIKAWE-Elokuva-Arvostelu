@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Lisää uusi arvostelu</title>
-</head>
+{% block title %}Uusi arvostelu{% endblock %}
 
-<body>
+{% block content %}
   <h1>Uusi arvostelu</h1>
   <form action="/create_post" method="post">
     <p>
@@ -26,6 +23,7 @@
       <input type="radio" name="rating" value="4"> ⭐⭐⭐⭐<br>
       <input type="radio" name="rating" value="5"> ⭐⭐⭐⭐⭐<br>
     </p>
+
     <p>
       Arvostelu: <br />
       <textarea name="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
@@ -54,6 +52,4 @@
       <input type="submit" value="Luo arvostelu" />
     </p>
   </form>
-</body>
-
-</html>
+{% endblock %}

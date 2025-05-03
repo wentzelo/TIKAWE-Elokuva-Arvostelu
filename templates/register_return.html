@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Tunnus luotu</title>
-</head>
-<body>
-  <h1>Tunnus luotu onnistuneesti!</h1>
+{% extends "layout.html" %}
 
+{% block title %}Tunnus luotu{% endblock %}
+
+{% block content %}
+  <h1>Tunnus luotu onnistuneesti!</h1>
   <p>
-    <a href="/login"><button>Kirjaudu sisään</button></a>
-    <a href="/"><button>Palaa kotisivulle</button></a>
+    Voit nyt <a href="/login">kirjautua sisään</a>.
   </p>
-</body>
-</html>
+{% endblock %}

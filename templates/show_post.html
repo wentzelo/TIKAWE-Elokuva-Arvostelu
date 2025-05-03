@@ -1,44 +1,35 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>{{ post.title }}</title>
-  <style>
-    .stars {
-      color: gold;
-      font-size: 24px;
-    }
-  </style>
-</head>
+{% block title %}{{ post.title }}{% endblock %}
 
-<body>
-  <h1>{{ post.title }}</h1>
+{% block content %}
 
-  <p>
-    Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
-  </p>
+<h1>{{ post.title }}</h1>
 
-  <div>
-    <p>Katsottu:</p>
-    <p>{{ post.watch_date }}</p>
+<p>
+  Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
+</p>
+
+<div>
+  <p>Katsottu:</p>
+  <p>{{ post.watch_date }}</p>
+</div>
+
+<div>
+  <p>Arvosana:</p>
+  <div style="color: gold; font-size: 24px;">
+    {% for _ in range(post.rating) %}
+    ⭐
+    {% endfor %}
   </div>
+</div>
 
-  <div>
-    <p>Arvosana:</p>
-    <div class="stars">
-      {% for _ in range(post.rating) %}
-      ⭐
-      {% endfor %}
-    </div>
-  </div>
-  
+<div>
+  <p>Arvostelu:</p>
+  <p>{{ post.review_text }}</p>
+</div>
 
-  <div>
-    <p>Arvostelu:</p>
-    <p>{{ post.review_text }}</p>
-  </div>
-
-  {% if genres %}
+{% if genres %}
   <p>Genret:</p>
   <ul>
     {% for genre in genres %}
@@ -47,14 +38,14 @@
   </ul>
 {% endif %}
 
-
-  {% if session.user_id == post.user_id %}
+{% if session.user_id == post.user_id %}
   <div>
     <button onclick="window.location.href='/edit_post/{{ post.id }}'">Muokkaa</button>
     <button onclick="window.location.href='/remove_post/{{ post.id }}'">Poista</button>
   </div>
 {% endif %}
 
+{% if session.user_id != post.user_id %}
 <hr> 
 
 <h3>Arvostele arvostelu</h3>
@@ -72,29 +63,25 @@
   </p>
   <input type="submit" value="Lähetä">
 </form>
+{% endif %}
 
 <hr>
 
-<h4>Saadut kommentit</h4>
-<ul>
-  {% for c in comments %}
-    <li>
-      {% if c.is_positive %}
-      👍
-      {% else %}
-      👎
-      {% endif %}
-      {{ c.comment }} <em>({{ c.created_at }})</em>
-    </li>
-  {% endfor %}
-</ul>
-
-<hr> 
-
-<div>
-    <button onclick="window.location.href='/'">Palaa kotisivulle</button>
-  </div>
-  
-</body>
-
-</html>
+<h4>Kommentit</h4>
+{% if comments %}
+  <ul>
+    {% for c in comments %}
+      <li>
+        {% if c.is_positive %}
+          👍
+        {% else %}
+          👎
+        {% endif %}
+        {{ c.comment }} <em>({{ c.created_at }})</em>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Ei kommenteja vielä.</p>
+{% endif %}
+{% endblock %}
