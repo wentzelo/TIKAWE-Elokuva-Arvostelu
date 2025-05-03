@@ -9,8 +9,8 @@
 <form action="/edit_post/{{ post.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <p>
-    Elokuvan nimi: <br />
-    <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
+    <label for="title">Elokuvan nimi:</label>:<br />
+    <input type="text" name="title" id="title" required maxlength="100"/>
   </p>
 
   <p>
@@ -28,8 +28,8 @@
   </p>
 
   <p>
-    Arvostelu: <br />
-    <textarea name="review_text" rows="8" cols="70" required maxlength="4200">{{ post.review_text }}</textarea>
+    <label for="review_text">Arvostelu</label>:<br />
+    <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
   </p>
 
   <p>
@@ -46,8 +46,8 @@
   </p>
 
   <p>
-    Omat genret (pilkulla erotettuna): <br />
-    <input type="text" name="custom_genre" maxlength="100">
+    <label for="custom_genre">Omat genret (pilkulla erotettuna)</label>:<br />
+    <input type="text" name="custom_genre" id="custom_genre" maxlength="200">
   </p>
 
   <p>

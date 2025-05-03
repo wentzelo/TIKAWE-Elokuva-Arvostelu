@@ -14,12 +14,12 @@
     <form action="/login" method="post">
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <p>
-        Tunnus: <br />
-        <input type="text" name="username" />
+        <label for="tunnus">Tunnus</label>:<br />
+        <input type="text" name="username" id="tunnus"/>
       </p>
       <p>
-        Salasana: <br />
-        <input type="password" name="password" />
+        <label for="salasana">Salasana:</label>:<br />
+        <input type="password" name="password" id="salasana" />
       </p>
       <input type="submit" value="Kirjaudu" />
     </form>
