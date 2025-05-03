@@ -11,8 +11,7 @@
 </p>
 
 <div>
-  <p>Katsottu:</p>
-  <p>{{ post.watch_date }}</p>
+  <p>Katsottu: {{ post.watch_date }}</p>
 </div>
 
 <div>
@@ -24,9 +23,9 @@
   </div>
 </div>
 
-<div>
+<div class="item">
   <p>Arvostelu:</p>
-  <p>{{ post.review_text }}</p>
+  <p>{{ post.review_text | show_lines }}</p>
 </div>
 
 {% if genres %}
@@ -45,11 +44,8 @@
   </div>
 {% endif %}
 
-{% if session.user_id != post.user_id %}
+{% if session.username and session.user_id != post.user_id %}
 <hr> 
-
-<h3>Arvostele arvostelu</h3>
-
 <form action="/comment/{{ post.id }}" method="post">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <label>
@@ -64,6 +60,9 @@
   </p>
   <input type="submit" value="Lähetä">
 </form>
+{% elif not session.username %}
+<hr>
+<p>Jos haluat kommentoida, <a href="/login">kirjaudu sisään</a>.</p>
 {% endif %}
 
 <hr>

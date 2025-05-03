@@ -9,10 +9,10 @@
     Arvosteluita: {{ posts | count }}
   </p>
 
-  <h2>Arvostelut</h2>
-  <ul>
-    {% for post in posts %}
-      <li><a href="/post/{{ post.id }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
+  <h2>Arvostelut:</h2>
+  {% for post in posts %}
+  <div class="item">
+    <h3><a href="/post/{{ post.id }}">{{ post.title }}</a></h3>
+  </div>
+{% endfor %}
 {% endblock %}
