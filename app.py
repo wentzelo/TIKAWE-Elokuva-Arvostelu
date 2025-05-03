@@ -2,6 +2,7 @@ from flask import Flask, abort, redirect, render_template, request, session, fla
 import config
 import posts
 import users
+from datetime import date
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -40,6 +41,7 @@ def new_post():
 @app.route("/create_post", methods=["POST"])
 def create_post():
     check_login()
+    today = date.today().isoformat()
 
     title = request.form["title"].strip()
     if not title:
@@ -55,19 +57,17 @@ def create_post():
         flash("VIRHE: Arvostelu on liian pitkä (max 4200 merkkiä)")
         return redirect("/new_post")
 
-    user_id = session["user_id"]
     watch_date = request.form["watch_date"]
+    if watch_date > today:
+        flash("VIRHE: Katsomispäivä ei voi olla tulevaisuudessa.")
+        return redirect("/new_post")
+
+    user_id = session["user_id"]
     genres = request.form.getlist("genres")
     custom_genre = request.form.get("custom_genre", "").strip()
 
     post_id = posts.add_post(title, rating, review_text, watch_date, user_id)
-
-    if custom_genre:
-        genres.append(custom_genre)
-
-    for genre in genres:
-        genre_id = posts.get_or_create_genre(genre)
-        posts.add_post_genre(post_id, genre_id)
+    posts.update_post_genres(post_id, genres, custom_genre)
 
     return redirect("/")
 
@@ -102,7 +102,6 @@ def edit_post(post_id):
 
     posts.update_post(post_id, title, rating, review_text, watch_date)
 
-    #replace old genres
     posts.update_post_genres(post_id, selected_genres, custom_genre)
 
     return redirect(f"/post/{post_id}")

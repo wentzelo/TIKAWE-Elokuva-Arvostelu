@@ -9,8 +9,12 @@ def add_post(title, rating, review_text, watch_date, user_id):
     return db.last_insert_id()
 
 def get_posts():
-    sql = """SELECT id, title FROM posts ORDER BY id DESC"""
-
+    sql = """
+        SELECT posts.id, posts.title, posts.user_id, users.username
+        FROM posts
+        JOIN users ON posts.user_id = users.id
+        ORDER BY posts.id DESC
+    """
     return db.query(sql)
 
 def get_post(post_id):
