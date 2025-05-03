@@ -67,20 +67,24 @@
 
 <hr>
 
-<h4>Kommentit</h4>
+<h4>Kommentit:</h4>
+
 {% if comments %}
-  <ul>
-    {% for c in comments %}
-      <li>
+  {% for c in comments %}
+    <div class="item">
+      <p>
         {% if c.is_positive %}
           👍
         {% else %}
           👎
         {% endif %}
-        {{ c.comment }} <em>({{ c.created_at }})</em>
-      </li>
-    {% endfor %}
-  </ul>
+        {{ c.comment }}
+      </p>
+      <p style="font-size: 0.9em; color: gray; margin-top: -0.5em;">
+        {{ c.created_at }}
+      </p>
+    </div>
+  {% endfor %}
 {% else %}
   <p>Ei kommenteja vielä.</p>
 {% endif %}

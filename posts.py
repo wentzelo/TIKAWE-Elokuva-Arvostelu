@@ -1,5 +1,3 @@
-"""Handles all database operations related to movie reviews (posts)"""
-
 import db
 
 def add_post(title, rating, review_text, watch_date, user_id):
