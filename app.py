@@ -1,7 +1,4 @@
-"""Main application file for the Elokuva-arvostelu web app."""
-
-from flask import Flask
-from flask import abort, redirect, render_template, request, session
+from flask import Flask, abort, redirect, render_template, request, session, flash
 import config
 import posts
 import users
@@ -44,13 +41,19 @@ def new_post():
 def create_post():
     check_login()
 
-    title = request.form["title"]
+    title = request.form["title"].strip()
+    if not title:
+        flash("VIRHE: Elokuvan nimi ei voi olla tyhjä tai pelkkä välilyönti")
+        return redirect("/new_post")
     if len(title) > 100:
-        abort(403)
+        flash("VIRHE: Elokuvan nimi on liian pitkä (max 100 merkkiä)")
+        return redirect("/new_post")
+
     rating = request.form["rating"]
     review_text = request.form["review_text"]
     if len(review_text) > 4200:
-        abort(403)
+        flash("VIRHE: Arvostelu on liian pitkä (max 4200 merkkiä)")
+        return redirect("/new_post")
 
     user_id = session["user_id"]
     watch_date = request.form["watch_date"]
@@ -152,23 +155,33 @@ def give_comment(post_id):
 def register():
     return render_template("register.html")
 
+
 @app.route("/create", methods=["POST"])
 def create():
-    username = request.form["username"]
+    username = request.form["username"].strip()
     password1 = request.form["password1"]
     password2 = request.form["password2"]
 
-    if not username.strip() or not password1.strip() or not password2.strip():
-        return "VIRHE: kentät eivät saa olla tyhjiä" 
+    if not username or not password1 or not password2:
+        flash("VIRHE: Kentät eivät saa olla tyhjiä")
+        return redirect("/register")
+
+    if len(password1) < 6 or not any(char.isdigit() for char in password1):
+        flash("VIRHE: Salasanan tulee olla vähintään 6 merkkiä pitkä ja sisältää ainakin yksi numero")
+        return redirect("/register")
 
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        flash("VIRHE: Salasanat eivät ole samat")
+        return redirect("/register")
 
     success = users.create_user(username, password1)
     if not success:
-        return "VIRHE: tunnus on jo varattu"
+        flash("VIRHE: Tunnus on jo varattu")
+        return redirect("/register")
 
     return render_template("register_return.html")
+
+from flask import request, render_template, redirect, session, flash
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -178,6 +191,10 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
+    if not username.strip() or not password.strip():
+        flash("VIRHE: Tunnus ja salasana eivät saa olla tyhjiä")
+        return redirect("/login")
+
     user = users.login_user(username, password)
 
     if user:
@@ -185,7 +202,8 @@ def login():
         session["username"] = username
         return redirect("/")
 
-    return "VIRHE: väärä tunnus tai salasana"
+    flash("VIRHE: Väärä tunnus tai salasana")
+    return redirect("/login")
 
 @app.route("/logout")
 def logout():
