@@ -51,6 +51,7 @@
 <h3>Arvostele arvostelu</h3>
 
 <form action="/comment/{{ post.id }}" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <label>
     <input type="radio" name="reaction" value="good" required> 👍
   </label>

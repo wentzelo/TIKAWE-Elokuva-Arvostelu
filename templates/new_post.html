@@ -5,6 +5,7 @@
 {% block content %}
   <h1>Uusi arvostelu</h1>
   <form action="/create_post" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <p>
       Elokuvan nimi: <br />
       <input type="text" name="title" required maxlength="100"/>

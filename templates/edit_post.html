@@ -7,6 +7,7 @@
 <h1>Muokkaa arvostelua</h1>
 
 <form action="/edit_post/{{ post.id }}" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <p>
     Elokuvan nimi: <br />
     <input type="text" name="title" value="{{ post.title }}" required maxlength="100">
