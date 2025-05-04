@@ -1,13 +1,28 @@
-from flask import Flask, abort, redirect, render_template, request, session, flash
+from flask import Flask
+from flask import abort, redirect, render_template, request, session, flash, g
+import markupsafe
+
+from datetime import date
+import secrets
+import math
+import time
+
 import config
 import posts
 import users
-from datetime import date
-import secrets
-import markupsafe
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
 
 def check_login():
     if "user_id" not in session:
@@ -24,9 +39,20 @@ def show_lines(content):
     return markupsafe.Markup(content)
 
 @app.route("/")
-def index():
-    all_posts = posts.get_posts()
-    return render_template("index.html", posts=all_posts)
+@app.route("/page/<int:page>")
+def index(page=1):
+    page_size = 15
+    post_count = posts.get_post_count()
+    page_count = math.ceil(post_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/page/1")
+    if page > page_count:
+        return redirect(f"/page/{page_count}")
+
+    page_posts = posts.get_posts(page, page_size)
+    return render_template("index.html", posts=page_posts, page=page, page_count=page_count)
 
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
