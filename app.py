@@ -124,7 +124,16 @@ def edit_post(post_id):
         abort(403)
 
     if request.method == "GET":
-        return render_template("edit_post.html", post=post, genres=genres)
+        predefined_genres = ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka",
+                            "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"]
+        custom_genres = [g["name"] for g in genres if g["name"] not in predefined_genres]
+
+        return render_template(
+            "edit_post.html",
+            post=post,
+            genres=genres,
+            custom_genre=", ".join(custom_genres)
+        )
 
     # POST
     check_csrf()
