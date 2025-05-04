@@ -10,7 +10,7 @@
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <p>
     <label for="title">Elokuvan nimi:</label>:<br />
-    <input type="text" name="title" id="title" required maxlength="100"/>
+    <input type="text" name="title" id="title" value="{{ post.title }}" required maxlength="100"/>
   </p>
 
   <p>
@@ -29,7 +29,7 @@
 
   <p>
     <label for="review_text">Arvostelu</label>:<br />
-    <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
+    <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200">{{ post.review_text }}</textarea>
   </p>
 
   <p>
