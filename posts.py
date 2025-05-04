@@ -109,13 +109,6 @@ def add_comment(post_id, is_positive, comment):
     sql = "INSERT INTO comments (post_id, is_positive, comment) VALUES (?, ?, ?)"
     db.execute(sql, [post_id, is_positive, comment])
 
-def get_comment_counts(post_id):
-    sql_good = "SELECT COUNT(*) FROM comments WHERE post_id = ? AND is_positive = 1"
-    sql_bad = "SELECT COUNT(*) FROM comments WHERE post_id = ? AND is_positive = 0"
-    good = db.query(sql_good, [post_id])[0][0]
-    bad = db.query(sql_bad, [post_id])[0][0]
-    return good, bad
-
 def get_comments(post_id):
     sql = """
     SELECT is_positive, comment, created_at

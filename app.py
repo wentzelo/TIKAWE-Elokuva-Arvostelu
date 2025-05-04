@@ -61,14 +61,11 @@ def show_post(post_id):
     if not post:
         abort(404)
 
-    good_count, bad_count = posts.get_comment_counts(post_id)
     comments = posts.get_comments(post_id)
 
     return render_template("show_post.html",
                                             post=post,
                                             genres=genres,
-                                            good_count=good_count,
-                                            bad_count=bad_count,
                                             comments=comments)
 
 @app.route("/new_post")
