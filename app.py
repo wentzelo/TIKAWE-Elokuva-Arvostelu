@@ -1,11 +1,11 @@
-from flask import Flask
-from flask import abort, redirect, render_template, request, session, flash, g
-import markupsafe
-
 from datetime import date
 import secrets
 import math
 import time
+
+from flask import Flask
+from flask import abort, redirect, render_template, request, session, flash, g
+import markupsafe
 
 import config
 import posts
@@ -80,7 +80,7 @@ def new_post():
 def create_post():
     check_login()
     check_csrf()
-    
+
     today = date.today().isoformat()
 
     title = request.form["title"].strip()
@@ -198,11 +198,10 @@ def give_comment(post_id):
 def register():
     return render_template("register.html")
 
-
 @app.route("/create", methods=["POST"])
 def create():
     check_csrf()
-    
+
     username = request.form["username"].strip()
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -225,8 +224,6 @@ def create():
         return redirect("/register")
 
     return render_template("register_return.html")
-
-from flask import request, render_template, redirect, session, flash
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

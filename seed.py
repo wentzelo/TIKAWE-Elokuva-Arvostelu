@@ -1,6 +1,5 @@
 import random
 import sqlite3
-from datetime import datetime, timedelta
 
 db = sqlite3.connect("database.db")
 

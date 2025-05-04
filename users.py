@@ -20,7 +20,6 @@ def login_user(username, password):
     user = result[0]
     return user if check_password_hash(user["password_hash"], password) else None
 
-
 def get_user(user_id):
     sql = "SELECT id, username FROM users WHERE id = ?"
     result = db.query(sql, [user_id])
