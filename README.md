@@ -11,7 +11,6 @@
 * Käyttäjät voivat lisätä elokuvalle genrejä valmiiusta valikosta tai omia genrejä.
 * Jättää palautetta muiden arvosteluista valitsemalla peukku ylös/alas ja kirjoittamalla valinnaisen kommentin.
 
-
 ## Sovelluksen asennus
 
 Asenna 'flask'-kirjasto:
