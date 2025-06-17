@@ -21,7 +21,7 @@ Asenna `flask`-kirjasto:
 
 Luo tietokannan taulut schema.sql avulla:
 
-`$ sqlite3 < database.db`
+`$ sqlite3 database.db < schema.sql`
 
 Jos haluat esitietoja voit ajaa seed.py ohjelman.
 
