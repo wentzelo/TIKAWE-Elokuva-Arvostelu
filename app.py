@@ -18,6 +18,12 @@ app.secret_key = config.secret_key
 def before_request():
     g.start_time = time.time()
 
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
+
 @app.after_request
 def after_request(response):
     elapsed_time = round(time.time() - g.start_time, 2)
