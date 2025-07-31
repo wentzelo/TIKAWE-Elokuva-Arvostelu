@@ -17,10 +17,6 @@ app.secret_key = config.secret_key
 @app.before_request
 def before_request():
     g.start_time = time.time()
-
-@app.before_request
-def before_request():
-    g.start_time = time.time()
     if "csrf_token" not in session:
         session["csrf_token"] = secrets.token_hex(16)
 
@@ -241,6 +237,8 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("login.html")
+    
+    check_csrf() 
 
     username = request.form["username"]
     password = request.form["password"]
@@ -254,7 +252,6 @@ def login():
     if user:
         session["user_id"] = user["id"]
         session["username"] = username
-        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
 
     flash("VIRHE: Väärä tunnus tai salasana")
@@ -262,6 +259,7 @@ def login():
 
 @app.route("/logout")
 def logout():
+    check_login()
     del session["user_id"]
     del session["username"]
     return redirect("/")
