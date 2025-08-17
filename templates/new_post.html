@@ -8,45 +8,38 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <p>
       <label for="title">Elokuva</label>:<br />
-      <input type="text" name="title" id="title" required maxlength="100"/>
+      <input type="text" name="title" id="title" required maxlength="100" value="{{ form_data.get('title', '') }}"/>
     </p>
 
     <p>
       Päivämäärä jolloin katsoit elokuvan: <br />
-      <input type="date" name="watch_date" required max="{{ max_date }}">
+      <input type="date" name="watch_date" required max="{{ max_date }}" value="{{ form_data.get('watch_date', '') }}">
     </p>
 
     <p>
       Arvosana: <br />
-      <input type="radio" name="rating" value="1" required> ⭐<br>
-      <input type="radio" name="rating" value="2"> ⭐⭐<br>
-      <input type="radio" name="rating" value="3"> ⭐⭐⭐<br>
-      <input type="radio" name="rating" value="4"> ⭐⭐⭐⭐<br>
-      <input type="radio" name="rating" value="5"> ⭐⭐⭐⭐⭐<br>
+      <input type="radio" name="rating" value="1" required {% if form_data.get('rating') == '1' %}checked{% endif %}> ⭐<br>
+      <input type="radio" name="rating" value="2" {% if form_data.get('rating') == '2' %}checked{% endif %}> ⭐⭐<br>
+      <input type="radio" name="rating" value="3" {% if form_data.get('rating') == '3' %}checked{% endif %}> ⭐⭐⭐<br>
+      <input type="radio" name="rating" value="4" {% if form_data.get('rating') == '4' %}checked{% endif %}> ⭐⭐⭐⭐<br>
+      <input type="radio" name="rating" value="5" {% if form_data.get('rating') == '5' %}checked{% endif %}> ⭐⭐⭐⭐⭐<br>
     </p>
 
     <p>
       <label for="review_text">Arvostelu</label>:<br />
-      <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200"></textarea>
+      <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200">{{ form_data.get('review_text', '') }}</textarea>
     </p>
 
     <p>
       Valitse genret: <br />
-      <label><input type="checkbox" name="genres" value="Toiminta"> Toiminta</label>
-      <label><input type="checkbox" name="genres" value="Draama"> Draama</label>
-      <label><input type="checkbox" name="genres" value="Komedia"> Komedia</label>
-      <label><input type="checkbox" name="genres" value="Sci-fi"> Sci-fi</label>
-      <label><input type="checkbox" name="genres" value="Kauhu"> Kauhu</label>
-      <label><input type="checkbox" name="genres" value="Romantiikka"> Romantiikka</label>
-      <label><input type="checkbox" name="genres" value="Dokumentti"> Dokumentti</label>
-      <label><input type="checkbox" name="genres" value="Seikkailu"> Seikkailu</label>
-      <label><input type="checkbox" name="genres" value="Fantasia"> Fantasia</label>
-      <label><input type="checkbox" name="genres" value="Animaatio"> Animaatio</label>
+      {% for genre in predefined_genres %}
+        <label><input type="checkbox" name="genres" value="{{ genre }}" {% if genre in form_data.get('genres', []) %}checked{% endif %}> {{ genre }}</label>
+      {% endfor %}
     </p>
     
     <p>
       <label for="custom_genre">Omat genret (pilkulla erotettuna)</label>:<br />
-      <input type="text" name="custom_genre" id="custom_genre" maxlength="200" size="70">
+      <input type="text" name="custom_genre" id="custom_genre" maxlength="200" size="70" value="{{ form_data.get('custom_genre', '') }}">
     </p>
 
     <p>
