@@ -260,6 +260,9 @@ def give_comment(post_id):
 
 @app.route("/register")
 def register():
+    if "user_id" in session:
+        flash("Olet jo kirjautunut sisään.")
+        return redirect("/")
     return render_template("register.html")
 
 
