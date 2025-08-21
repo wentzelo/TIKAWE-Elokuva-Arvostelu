@@ -13,22 +13,27 @@
 
 ## Sovelluksen asennus
 
-Asenna `flask`-kirjasto:
+1. Kloonaa sovellus komennolla: 'git clone https://github.com/wentzelo/TIKAWE-Elokuva-Arvostelu.git'
 
+2. (Valinnainen) Luo Python vietuaaliympäristö sovelluksen kansioon:
 
-`$ pip install flask`
+    Linux (Bash): 'python -m venv venv' ja aktivoi 'source venv/bin/activate'.
 
+    Windows (CMD): 'python -m venv venv' ja aktivoi 'env\Scripts\activate'.
 
-Luo tietokannan taulut schema.sql avulla:
+3. Asenna `flask`-kirjasto: `$ pip install flask`.
 
-`$ sqlite3 database.db < schema.sql`
+4. Luo tietokannan taulut schema.sql avulla:
 
-Jos haluat esitietoja voit ajaa seed.py ohjelman.
+    `$ sqlite3 database.db < schema.sql`
 
-Käynnistä sovellus seuraavalla komennolla:
+    Jos haluat esitietoja voit ajaa seed.py ohjelman: 'python seed.py'
 
+5. Käynnistä sovellus seuraavalla komennolla:
 
-`@ flask run`
+    `@ flask run`
+
+6. Siirry sovelluksen sivulle.
 
 ## Sovelluksen toiminta suurilla tietomäärillä
 
