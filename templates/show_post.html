@@ -7,15 +7,15 @@
 <h1>{{ post.title }}</h1>
 
 <p>
-  Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
+  <strong>Arvostelija:</strong> <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
 </p>
 
 <div>
-  <p>Katsottu: {{ post.watch_date }}</p>
+  <p><strong>Katsottu:</strong> {{ post.watch_date }}</p>
 </div>
 
 <div>
-  <p>Arvosana:</p>
+  <p><strong>Arvosana:</strong></p>
   <div style="color: gold; font-size: 24px;">
     {% for _ in range(post.rating) %}
     ⭐
@@ -24,17 +24,19 @@
 </div>
 
 <div class="item">
-  <p>Arvostelu:</p>
-  <p>{{ post.review_text | show_lines }}</p>
+  <p><strong>Arvostelu:</strong></p>
+  <div class="review-text">{{ post.review_text }}</div>
 </div>
 
 {% if genres %}
-  <p>Genret:</p>
-  <ul>
-    {% for genre in genres %}
-      <li>{{ genre.name }}</li>
-    {% endfor %}
-  </ul>
+  <div class="genre-item">
+    <p><strong>Genret:</strong></p>
+    <ul>
+      {% for genre in genres %}
+        <li>{{ genre.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endif %}
 
 {% if session.user_id == post.user_id %}
@@ -86,6 +88,6 @@
     </div>
   {% endfor %}
 {% else %}
-  <p>Ei kommenteja vielä.</p>
+  <p>Ei kommentteja vielä.</p>
 {% endif %}
 {% endblock %}

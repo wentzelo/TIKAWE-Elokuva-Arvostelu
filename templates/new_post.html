@@ -27,8 +27,8 @@
 
     <p>
       <label for="review_text">Arvostelu</label>:<br />
-      <textarea name="review_text" id="review_text" rows="8" cols="70" required maxlength="4200">{{ form_data.get('review_text', '') }}</textarea>
-    </p>
+      <textarea name="review_text" id="review_text" rows="8" required maxlength="4200">{{ form_data.get('review_text', '') }}</textarea>
+    </p>    
 
     <p>
       Valitse genret: <br />
@@ -39,7 +39,7 @@
     
     <p>
       <label for="custom_genre">Omat genret (pilkulla erotettuna)</label>:<br />
-      <input type="text" name="custom_genre" id="custom_genre" maxlength="200" size="70" value="{{ form_data.get('custom_genre', '') }}">
+      <input type="text" name="custom_genre" id="custom_genre" maxlength="200" value="{{ form_data.get('custom_genre', '') }}">
     </p>
 
     <p>
