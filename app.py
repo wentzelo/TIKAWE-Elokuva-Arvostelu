@@ -121,7 +121,7 @@ def create_post():
 
     user_id = session["user_id"]
 
-    post_id = posts.add_post(title, rating, review_text, watch_date, user_id)
+    post_id = posts.create_post(title, rating, review_text, watch_date, user_id)  # Changed from add_post
     posts.update_post_genres(post_id, genres, custom_genre)
 
     # Deletes the info after successful post creation

@@ -1,6 +1,6 @@
 import db
 
-def add_post(title, rating, review_text, watch_date, user_id):
+def create_post(title, rating, review_text, watch_date, user_id):
     sql = """
         INSERT INTO posts (title, rating, review_text, watch_date, user_id)
         VALUES (?, ?, ?, ?, ?)
