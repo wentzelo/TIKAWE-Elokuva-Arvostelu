@@ -103,10 +103,16 @@ def create_post():
         "custom_genre": custom_genre
     }
 
+    if not genres and not custom_genre:
+        flash("VIRHE: Valitse vähintään yksi genre tai kirjoita oma genre")
+        session["form_data"] = form_data
+        return redirect("/new_post")
+
     if not title:
         flash("VIRHE: Elokuvan nimi ei voi olla tyhjä tai pelkkä välilyönti")
         session["form_data"] = form_data
         return redirect("/new_post")
+
     if len(title) > 100:
         flash("VIRHE: Elokuvan nimi on liian pitkä (max 100 merkkiä)")
         session["form_data"] = form_data
@@ -192,6 +198,10 @@ def edit_post(post_id):
         
     selected_genres = request.form.getlist("genres")
     custom_genre = request.form.get("custom_genre", "").strip()
+
+    if not genres and not custom_genre:
+        flash("VIRHE: Valitse vähintään yksi genre tai kirjoita oma genre")
+        return redirect("/new_post")
 
     posts.update_post(post_id, title, rating, review_text, watch_date)
     posts.update_post_genres(post_id, selected_genres, custom_genre)
@@ -296,8 +306,14 @@ def create():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
+    if "user_id" in session:
+        return redirect("/")
+        
     if request.method == "GET":
-        return render_template("login.html")
+
+        saved_username = session.pop("login_username", "")
+        return render_template("login.html", username=saved_username)
     
     check_csrf() 
 
@@ -306,6 +322,7 @@ def login():
 
     if not username.strip() or not password.strip():
         flash("VIRHE: Tunnus ja salasana eivät saa olla tyhjiä")
+        session["login_username"] = username
         return redirect("/login")
 
     user = users.login_user(username, password)
@@ -313,9 +330,13 @@ def login():
     if user:
         session["user_id"] = user[0]
         session["username"] = username
+
+        session.pop("login_username", None)
         return redirect("/")
     
     flash("VIRHE: Väärä tunnus tai salasana")
+
+    session["login_username"] = username
     return redirect("/login")
 
 
@@ -325,3 +346,5 @@ def logout():
     del session["user_id"]
     del session["username"]
     return redirect("/")
+
+#added requirement for one genre minimum andsaves username if password is failed
