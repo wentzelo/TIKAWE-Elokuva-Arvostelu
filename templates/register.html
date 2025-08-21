@@ -7,7 +7,7 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <p>
       <label for="tunnus">Tunnus</label>:<br />
-      <input type="text" name="username" id="tunnus"/>
+      <input type="text" name="username" id="tunnus" value="{{ username or '' }}"/>
     </p>
     <p>
       <label for="salasana">Salasana</label>:<br />

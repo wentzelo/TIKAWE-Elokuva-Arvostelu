@@ -195,6 +195,11 @@ def edit_post(post_id):
     if watch_date > today:
         flash("VIRHE: Katsomispäivä ei voi olla tulevaisuudessa.")
         return redirect(f"/edit_post/{post_id}")
+    
+    watch_year = int(watch_date[:4])
+    if watch_year < 1895:
+        flash("VIRHE: Katsomispäivä on liian vanha (vähintään vuosi 1895)")
+        return redirect(f"/edit_post/{post_id}")
         
     selected_genres = request.form.getlist("genres")
     custom_genre = request.form.get("custom_genre", "").strip()
@@ -273,8 +278,9 @@ def register():
     if "user_id" in session:
         flash("Olet jo kirjautunut sisään.")
         return redirect("/")
-    return render_template("register.html")
-
+    
+    saved_username = session.pop("register_username", "")
+    return render_template("register.html", username=saved_username)
 
 @app.route("/create", methods=["POST"])
 def create():
@@ -286,21 +292,27 @@ def create():
 
     if not username or not password1 or not password2:
         flash("VIRHE: Kentät eivät saa olla tyhjiä")
+        session["register_username"] = username
         return redirect("/register")
 
     if len(password1) < 6 or not any(char.isdigit() for char in password1):
-        flash("VIRHE: Salasanan tulee olla vähintään 6 merkkiä pitkä ja sisältää ainakin yksi numero")
+        flash("VIRHE: Salasanan tulee olla vähintään 6 merkkiä pitkä ja "
+              "sisältää ainakin yksi numero")
+        session["register_username"] = username
         return redirect("/register")
 
     if password1 != password2:
         flash("VIRHE: Salasanat eivät ole samat")
+        session["register_username"] = username
         return redirect("/register")
 
     success = users.create_user(username, password1)
     if not success:
         flash("VIRHE: Tunnus on jo varattu")
+        session["register_username"] = username
         return redirect("/register")
 
+    session.pop("register_username", None)
     return render_template("register_return.html")
 
 
@@ -346,5 +358,3 @@ def logout():
     del session["user_id"]
     del session["username"]
     return redirect("/")
-
-#added requirement for one genre minimum andsaves username if password is failed
