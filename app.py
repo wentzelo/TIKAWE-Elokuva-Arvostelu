@@ -37,6 +37,7 @@ def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
+
 @app.route("/")
 @app.route("/page/<int:page>")
 def index(page=1):
@@ -71,8 +72,10 @@ def new_post():
     check_login()
     # If there is form data in the session, it will be used to pre-fill the form
     form_data = session.get("form_data", {})
-    predefined_genres = ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka",
-                        "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"]
+    predefined_genres = [
+        "Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", 
+        "Romantiikka", "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"
+    ]
     return render_template("new_post.html", form_data=form_data, predefined_genres=predefined_genres)
 
 
@@ -296,12 +299,12 @@ def login():
         return redirect("/login")
 
     user = users.login_user(username, password)
-
+    
     if user:
-        session["user_id"] = user["id"]
+        session["user_id"] = user[0]
         session["username"] = username
         return redirect("/")
-
+    
     flash("VIRHE: Väärä tunnus tai salasana")
     return redirect("/login")
 
