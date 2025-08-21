@@ -7,15 +7,15 @@
 <h1>{{ post.title }}</h1>
 
 <p>
-  <strong>Arvostelija:</strong> <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
+  Arvostelija: <a href="/user/{{ post.user_id }}">{{ post.username }}</a>
 </p>
 
 <div>
-  <p><strong>Katsottu:</strong> {{ post.watch_date }}</p>
+  <p>Katsottu: {{ post.watch_date }}</p>
 </div>
 
 <div>
-  <p><strong>Arvosana:</strong></p>
+  <p>Arvosana:</p>
   <div style="color: gold; font-size: 24px;">
     {% for _ in range(post.rating) %}
     ⭐
@@ -24,13 +24,13 @@
 </div>
 
 <div class="item">
-  <p><strong>Arvostelu:</strong></p>
+  <p>Arvostelu:</p>
   <div class="review-text">{{ post.review_text }}</div>
 </div>
 
 {% if genres %}
   <div class="genre-item">
-    <p><strong>Genret:</strong></p>
+    <p>Genret:</p>
     <ul>
       {% for genre in genres %}
         <li>{{ genre.name }}</li>

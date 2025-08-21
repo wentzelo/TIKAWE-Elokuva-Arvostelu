@@ -117,6 +117,13 @@ def create_post():
         session["form_data"] = form_data
         return redirect("/new_post")
 
+    # Lisää vuosivalidointi
+    watch_year = int(watch_date[:4])
+    if watch_year < 1895:  # Ensimmäiset elokuvat tehtiin 1890-luvulla
+        flash("VIRHE: Katsomispäivä on liian vanha (vähintään vuosi 1895)")
+        session["form_data"] = form_data
+        return redirect("/new_post")
+
     if watch_date > today:
         flash("VIRHE: Katsomispäivä ei voi olla tulevaisuudessa.")
         session["form_data"] = form_data
@@ -124,7 +131,7 @@ def create_post():
 
     user_id = session["user_id"]
 
-    post_id = posts.create_post(title, rating, review_text, watch_date, user_id)  # Changed from add_post
+    post_id = posts.create_post(title, rating, review_text, watch_date, user_id)
     posts.update_post_genres(post_id, genres, custom_genre)
 
     # Deletes the info after successful post creation
