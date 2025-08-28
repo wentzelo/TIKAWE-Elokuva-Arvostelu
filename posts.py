@@ -26,11 +26,12 @@ def get_posts(page, page_size):
 
 def get_post(post_id):
     sql = """
-        SELECT posts.id, posts.title, posts.rating, posts.review_text, posts.watch_date,
-        users.id AS user_id, users.username
-        FROM posts
-        JOIN users ON posts.user_id = users.id
-        WHERE posts.id = ?
+    SELECT posts.id, posts.title, posts.rating, posts.review_text,
+    posts.watch_date, users.id 
+    AS user_id, users.username
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    WHERE posts.id = ?
     """
     result = db.query(sql, [post_id])
     if not result:
@@ -106,7 +107,10 @@ def update_post_genres(post_id, selected_genres, custom_genre=None):
 #Comment code
 
 def add_comment(post_id, is_positive, comment):
-    sql = "INSERT INTO comments (post_id, is_positive, comment) VALUES (?, ?, ?)"
+    sql = """
+    INSERT INTO comments (post_id, is_positive, comment) 
+    VALUES (?, ?, ?)
+    """
     db.execute(sql, [post_id, is_positive, comment])
 
 def get_comments(post_id):

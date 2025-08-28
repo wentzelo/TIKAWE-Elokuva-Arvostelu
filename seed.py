@@ -25,7 +25,9 @@ for name in genre_list:
 for i in range(1, user_count + 1):
     username = f"user{i}"
     password_hash = "testhash"
-    db.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", [username, password_hash])
+
+    db.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)",
+               [username, password_hash])
 
 for i in range(1, post_count + 1):
     title = f"Elokuva {i}"
@@ -33,13 +35,22 @@ for i in range(1, post_count + 1):
     review_text = f"Arvostelu {i} sisältöä."
     watch_date = "2024-01-01"
     user_id = random.randint(1, user_count)
-    db.execute("""INSERT INTO posts (title, rating, review_text, watch_date, user_id)
-                  VALUES (?, ?, ?, ?, ?)""", [title, rating, review_text, watch_date, user_id])
+
+    db.execute("""INSERT INTO posts (title, 
+                                    rating,
+                                    review_text,
+                                    watch_date,
+                                    user_id)
+                  VALUES (?, ?, ?, ?, ?)""", 
+                  [title, rating, review_text, watch_date, user_id])
+
     post_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
 
-    selected_genres = random.sample(list(genre_ids.values()), random.randint(1, 3))
+    selected_genres = random.sample(list(genre_ids.values()), 
+                                    random.randint(1, 3))
     for genre_id in selected_genres:
-        db.execute("INSERT INTO post_genres (post_id, genre_id) VALUES (?, ?)", [post_id, genre_id])
+        db.execute("INSERT INTO post_genres (post_id, genre_id) VALUES (?, ?)",
+                   [post_id, genre_id])
 
     for _ in range(random.randint(0, 5)):
         is_positive = random.randint(0, 1)

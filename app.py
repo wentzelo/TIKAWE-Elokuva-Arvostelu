@@ -52,7 +52,11 @@ def index(page=1):
         return redirect(f"/page/{page_count}")
 
     page_posts = posts.get_posts(page, page_size)
-    return render_template("index.html", posts=page_posts, page=page, page_count=page_count)
+
+    return render_template("index.html",
+                            posts=page_posts,
+                            page=page,
+                            page_count=page_count)
 
 
 @app.route("/post/<int:post_id>")
@@ -64,7 +68,9 @@ def show_post(post_id):
 
     comments = posts.get_comments(post_id)
 
-    return render_template("show_post.html", post=post, genres=genres, comments=comments)
+    return render_template("show_post.html",
+                           post=post, genres=genres,
+                           comments=comments)
 
 
 @app.route("/new_post")
@@ -76,7 +82,9 @@ def new_post():
         "Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", 
         "Romantiikka", "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"
     ]
-    return render_template("new_post.html", form_data=form_data, predefined_genres=predefined_genres)
+    return render_template("new_post.html", 
+                            form_data=form_data,
+                            predefined_genres=predefined_genres)
 
 
 @app.route("/create_post", methods=["POST"])
@@ -159,9 +167,22 @@ def edit_post(post_id):
         abort(403)
 
     if request.method == "GET":
-        predefined_genres = ["Toiminta", "Draama", "Komedia", "Sci-fi", "Kauhu", "Romantiikka",
-                            "Dokumentti", "Seikkailu", "Fantasia", "Animaatio"]
-        custom_genres = [g["name"] for g in genres if g["name"] not in predefined_genres]
+        predefined_genres = ["Toiminta",
+                            "Draama",
+                            "Komedia",
+                            "Sci-fi",
+                            "Kauhu",
+                            "Romantiikka",
+                            "Dokumentti",
+                            "Seikkailu",
+                            "Fantasia",
+                            "Animaatio"]
+
+        custom_genres = [
+            g["name"] for g in genres
+            if g["name"] not in predefined_genres
+        ]
+
 
         return render_template(
             "edit_post.html",
@@ -172,11 +193,11 @@ def edit_post(post_id):
 
     # POST
     check_csrf()
-    
+
     today = date.today().isoformat()
-    
+
     title = request.form["title"].strip()
-    
+
     if not title:
         flash("VIRHE: Elokuvan nimi ei voi olla tyhjä")
         return redirect(f"/edit_post/{post_id}")
@@ -186,7 +207,7 @@ def edit_post(post_id):
 
     rating = request.form["rating"]
     review_text = request.form["review_text"]
-    
+
     if len(review_text) > 4200:
         flash("VIRHE: Arvostelu on liian pitkä (max 4200 merkkiä)")
         return redirect(f"/edit_post/{post_id}")
@@ -195,12 +216,12 @@ def edit_post(post_id):
     if watch_date > today:
         flash("VIRHE: Katsomispäivä ei voi olla tulevaisuudessa.")
         return redirect(f"/edit_post/{post_id}")
-    
+
     watch_year = int(watch_date[:4])
     if watch_year < 1895:
         flash("VIRHE: Katsomispäivä on liian vanha (vähintään vuosi 1895)")
         return redirect(f"/edit_post/{post_id}")
-        
+
     selected_genres = request.form.getlist("genres")
     custom_genre = request.form.get("custom_genre", "").strip()
 
@@ -321,12 +342,12 @@ def login():
 
     if "user_id" in session:
         return redirect("/")
-        
+
     if request.method == "GET":
 
         saved_username = session.pop("login_username", "")
         return render_template("login.html", username=saved_username)
-    
+
     check_csrf() 
 
     username = request.form["username"]
@@ -338,14 +359,14 @@ def login():
         return redirect("/login")
 
     user = users.login_user(username, password)
-    
+
     if user:
         session["user_id"] = user[0]
         session["username"] = username
 
         session.pop("login_username", None)
         return redirect("/")
-    
+
     flash("VIRHE: Väärä tunnus tai salasana")
 
     session["login_username"] = username
