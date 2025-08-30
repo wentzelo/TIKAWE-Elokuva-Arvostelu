@@ -13,13 +13,13 @@
 
 ## Sovelluksen asennus
 
-1. Kloonaa sovellus komennolla: 'git clone https://github.com/wentzelo/TIKAWE-Elokuva-Arvostelu.git'
+1. Kloonaa sovellus komennolla: `git clone https://github.com/wentzelo/TIKAWE-Elokuva-Arvostelu.git`
 
 2. (Valinnainen) Luo Python vietuaaliympäristö sovelluksen kansioon:
 
-    Linux (Bash): 'python -m venv venv' ja aktivoi 'source venv/bin/activate'.
+    Linux (Bash): `python -m venv venv` ja aktivoi `source venv/bin/activate`.
 
-    Windows (CMD): 'python -m venv venv' ja aktivoi 'env\Scripts\activate'.
+    Windows (CMD): `python -m venv venv` ja aktivoi `venv\Scripts\activate`.
 
 3. Asenna `flask`-kirjasto: `$ pip install flask`.
 
