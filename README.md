@@ -61,4 +61,4 @@ Indexien jälkeen - 100 000 käyttäjää + 1 000 000:
 
 ### Miten sivutus toimii
 
-Kun käyttäjä siirtyy etusivulle vain sivukohtainen määrä arvosteluita haetaan tietokannasta `LIMIT` ja `OFFSET` ehtoja käyttämällä Esim sivulla kolme haetaan rivit 21-30.
+Kun käyttäjä siirtyy etusivulle vain sivukohtainen määrä arvosteluita haetaan tietokannasta `LIMIT` ja `OFFSET` ehtoja käyttämällä. Esim. sivulla kolme haetaan rivit 21-30.
