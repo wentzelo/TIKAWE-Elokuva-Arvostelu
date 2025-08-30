@@ -7,15 +7,18 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <p>
       <label for="tunnus">Tunnus</label>:<br />
-      <input type="text" name="username" id="tunnus" value="{{ username or '' }}"/>
+      <input type="text" name="username" id="tunnus" value="{{ username or '' }}" />
     </p>
     <p>
       <label for="salasana">Salasana</label>:<br />
       <input type="password" name="password1" id="salasana" />
+      <span style="color: gray; font-size: 0.9em; display: block;">
+        Salasanan tulee olla vähintään 6 merkkiä pitkä ja sisältää ainakin yksi numero.
+      </span>
     </p>
     <p>
       <label for="salasana2">Salasana uudestaan</label>:<br />
-      <input type="password" name="password2" id="salasana2"/>
+      <input type="password" name="password2" id="salasana2" />
     </p>
     <input type="submit" value="Luo tunnus" />
   </form>
