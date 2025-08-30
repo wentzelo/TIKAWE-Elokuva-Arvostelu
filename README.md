@@ -27,7 +27,7 @@
 
     `$ sqlite3 database.db < schema.sql`
 
-    Jos haluat esitietoja voit ajaa seed.py ohjelman: 'python seed.py'
+    Jos haluat esitietoja voit ajaa seed.py ohjelman: `python seed.py`
 
 5. Käynnistä sovellus seuraavalla komennolla:
 
