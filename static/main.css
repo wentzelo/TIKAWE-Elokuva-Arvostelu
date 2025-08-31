@@ -57,3 +57,10 @@ textarea {
   border-radius: 4px;
   font-family: inherit;
 }
+
+.post-title {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 100%;
+}
